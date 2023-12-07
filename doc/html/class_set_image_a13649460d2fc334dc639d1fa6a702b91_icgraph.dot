@@ -1,0 +1,16 @@
+digraph "SetImage::setCalcFlag"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="SetImage::setCalcFlag",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="SetImage::calcSet",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a48d73919206a46f6b7fcb4c0ba1af5bb",tooltip="Set Calculation."];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="SetImage::readParamInput",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#ae3b996cf8c2cdbc30cfde9629101fc13",tooltip="UI Methods."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="SetImage::SetImage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a93c08622da4b6a805aa1c3addd6774d0",tooltip="Initialzation."];
+  Node1 -> Node5 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="SetImage::zoomImage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a52ca9199672df244756d03bcde8904d2",tooltip=" "];
+}

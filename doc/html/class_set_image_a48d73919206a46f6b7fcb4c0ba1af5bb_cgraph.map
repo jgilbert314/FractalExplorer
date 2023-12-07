@@ -1,0 +1,13 @@
+<map id="SetImage::calcSet" name="SetImage::calcSet">
+<area shape="rect" id="node1" title="Set Calculation." alt="" coords="5,183,144,209"/>
+<area shape="rect" id="node2" href="$class_set_image.html#a9fa26f15173e6dd51978ba5dcc46f16b" title=" " alt="" coords="199,5,393,32"/>
+<area shape="rect" id="node3" href="$class_set_image.html#a911cb37558901408f0e2157e1147a571" title=" " alt="" coords="211,56,381,83"/>
+<area shape="rect" id="node5" href="$class_set_image.html#af8ae9e349763fc0dff9f85326d0b03da" title=" " alt="" coords="651,208,797,235"/>
+<area shape="rect" id="node6" href="$class_set_image.html#ae2037053425fb3dc1c3445766942d839" title=" " alt="" coords="196,157,396,184"/>
+<area shape="rect" id="node7" href="$class_set_image.html#a13649460d2fc334dc639d1fa6a702b91" title="Specifies whether a set should be recalculated." alt="" coords="212,208,380,235"/>
+<area shape="rect" id="node8" href="$class_set_image.html#a400b72abb122d235d0a8ee91d72a5d8b" title="Updates bounds from center&#45;span coordinates." alt="" coords="212,259,380,285"/>
+<area shape="rect" id="node9" href="$class_set_image.html#acb5f583b7e8dcdb8d08ff67897202b3f" title="Scales and updates span coordinates." alt="" coords="207,309,385,336"/>
+<area shape="rect" id="node11" href="$class_set_image.html#ae6759c8c5522fc8e9f0c0e22a2c8be0e" title=" " alt="" coords="192,360,400,387"/>
+<area shape="rect" id="node4" href="$class_set_image.html#a45eabf680c8da018352c28b715950452" title=" " alt="" coords="448,56,603,83"/>
+<area shape="rect" id="node10" href="$class_set_image.html#a636b908014c55c873ace4a243f1890d7" title=" " alt="" coords="453,233,598,260"/>
+</map>

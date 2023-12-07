@@ -1,0 +1,15 @@
+digraph "SetImage::linspace"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="RL";
+  Node1 [label="SetImage::linspace",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip=" "];
+  Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="SetImage::calcHSV",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a636b908014c55c873ace4a243f1890d7",tooltip=" "];
+  Node2 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="SetImage::updateImage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#acb5f583b7e8dcdb8d08ff67897202b3f",tooltip="Scales and updates span coordinates."];
+  Node3 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="SetImage::calcSet",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a48d73919206a46f6b7fcb4c0ba1af5bb",tooltip="Set Calculation."];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+}

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+#echo "Input: " $*
+#echo "Proc Num: " ${2}
+
+if [ ${3} -eq 1 ]
+	then
+		mpicxx main.cpp -o $1 -O3
+fi
+mpirun -np ${2} $1

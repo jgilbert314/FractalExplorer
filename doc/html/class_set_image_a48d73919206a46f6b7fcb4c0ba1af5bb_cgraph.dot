@@ -1,0 +1,29 @@
+digraph "SetImage::calcSet"
+{
+ // LATEX_PDF_SIZE
+  edge [fontname="Helvetica",fontsize="10",labelfontname="Helvetica",labelfontsize="10"];
+  node [fontname="Helvetica",fontsize="10",shape=record];
+  rankdir="LR";
+  Node1 [label="SetImage::calcSet",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black",tooltip="Set Calculation."];
+  Node1 -> Node2 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node2 [label="SetImage::calcSpanCoords",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a9fa26f15173e6dd51978ba5dcc46f16b",tooltip=" "];
+  Node1 -> Node3 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="SetImage::formBitMap",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a911cb37558901408f0e2157e1147a571",tooltip=" "];
+  Node3 -> Node4 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="SetImage::mag_calc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a45eabf680c8da018352c28b715950452",tooltip=" "];
+  Node1 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node5 [label="SetImage::linspace",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#af8ae9e349763fc0dff9f85326d0b03da",tooltip=" "];
+  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="SetImage::mandelbrot_calc",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#ae2037053425fb3dc1c3445766942d839",tooltip=" "];
+  Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="SetImage::setCalcFlag",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a13649460d2fc334dc639d1fa6a702b91",tooltip="Specifies whether a set should be recalculated."];
+  Node1 -> Node8 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node8 [label="SetImage::updateDelC",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a400b72abb122d235d0a8ee91d72a5d8b",tooltip="Updates bounds from center-span coordinates."];
+  Node1 -> Node9 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node9 [label="SetImage::updateImage",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#acb5f583b7e8dcdb8d08ff67897202b3f",tooltip="Scales and updates span coordinates."];
+  Node9 -> Node10 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node10 [label="SetImage::calcHSV",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#a636b908014c55c873ace4a243f1890d7",tooltip=" "];
+  Node10 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node1 -> Node11 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node11 [label="SetImage::updateParamDisp",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$class_set_image.html#ae6759c8c5522fc8e9f0c0e22a2c8be0e",tooltip=" "];
+}

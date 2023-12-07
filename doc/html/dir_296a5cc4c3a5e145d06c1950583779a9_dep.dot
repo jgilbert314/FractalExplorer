@@ -1,0 +1,14 @@
+digraph "MyUI" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_296a5cc4c3a5e145d06c1950583779a9 {
+    graph [ bgcolor="#eeeeff", pencolor="black", label="" URL="dir_296a5cc4c3a5e145d06c1950583779a9.html"];
+    dir_296a5cc4c3a5e145d06c1950583779a9 [shape=plaintext label="MyUI"];
+  dir_99df95d98ed201fc73292e7c72ece1a5 [shape=box label="build-MyUI-Desktop-Debug" fillcolor="white" style="filled" URL="dir_99df95d98ed201fc73292e7c72ece1a5.html"];
+  dir_dfd1e023747eaef93879aebb35045b96 [shape=box label="build-MyUI-Desktop-Release" fillcolor="white" style="filled" URL="dir_dfd1e023747eaef93879aebb35045b96.html"];
+  dir_358baa82a86466679cfb4f71ef7fea15 [shape=box label="MyUI" fillcolor="white" style="filled" URL="dir_358baa82a86466679cfb4f71ef7fea15.html"];
+  }
+  dir_99df95d98ed201fc73292e7c72ece1a5->dir_358baa82a86466679cfb4f71ef7fea15 [headlabel="1", labeldistance=1.5 headhref="dir_000001_000003.html"];
+  dir_dfd1e023747eaef93879aebb35045b96->dir_358baa82a86466679cfb4f71ef7fea15 [headlabel="1", labeldistance=1.5 headhref="dir_000002_000003.html"];
+}

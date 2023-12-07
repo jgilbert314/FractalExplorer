@@ -1,0 +1,2 @@
+g++ omp_test.cpp -o omp_test -fopenmp -O2
+./omp_test

@@ -1,0 +1,11 @@
+digraph "MyUI/build-MyUI-Desktop-Debug" {
+  compound=true
+  node [ fontsize="10", fontname="Helvetica"];
+  edge [ labelfontsize="10", labelfontname="Helvetica"];
+  subgraph clusterdir_296a5cc4c3a5e145d06c1950583779a9 {
+    graph [ bgcolor="#ddddee", pencolor="black", label="MyUI" fontname="Helvetica", fontsize="10", URL="dir_296a5cc4c3a5e145d06c1950583779a9.html"]
+  dir_358baa82a86466679cfb4f71ef7fea15 [shape=box label="MyUI" URL="dir_358baa82a86466679cfb4f71ef7fea15.html"];
+  dir_99df95d98ed201fc73292e7c72ece1a5 [shape=box, label="build-MyUI-Desktop-Debug", style="filled", fillcolor="#eeeeff", pencolor="black", URL="dir_99df95d98ed201fc73292e7c72ece1a5.html"];
+  }
+  dir_99df95d98ed201fc73292e7c72ece1a5->dir_358baa82a86466679cfb4f71ef7fea15 [headlabel="1", labeldistance=1.5 headhref="dir_000001_000003.html"];
+}
