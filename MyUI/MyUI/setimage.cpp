@@ -169,10 +169,10 @@ void SetImage::linspace(vector<double> &lin_vec, double bound_L, double bound_U,
 
     // Throw an error if the interval is improperly defined
     if (bound_L >= bound_U) {
-        throw runtime_error( "Upper bound must be greater than lower bound." );
+        throw invalid_argument("Upper bound must be greater than lower bound.");
     }
     if (N <= 1) {
-        throw invalid_argument( "The number of points must be greater than 1." );
+        throw invalid_argument("The number of points must be greater than 1.");
     }
 
     // Distance between points in set
@@ -331,22 +331,64 @@ void SetImage::zoomImage(double scale) { // ModParam
 void SetImage::readParamInput() {
     // Dec 01, 2023
 
+    // TODO: refactoring -- add error checking to labels via subclass (float, int, span)
+
     // Values seperated by type due to QString limits
     // Read values with type double
+    double val;
+    bool convert_flag = 1;
+    QString err_msg;
     for (uint itr = 0; itr < param_input.input_dub.size(); itr++) {
         if (param_input.input_dub[itr]->isModified()) {
-            *disp_data.label_dubvals[itr] = param_input.input_dub[itr]->text().toDouble();
-            param_input.input_dub[itr]->setText("");
-            setCalcFlag(true);
-        };
-    };
+
+            // Argument checking
+            try {
+                val = param_input.input_dub[itr]->text().toDouble(&convert_flag);
+                if (!convert_flag) {
+                    err_msg = disp_data.label_dub[itr]->whatsThis() + " must be a number";
+                    throw invalid_argument(err_msg.toStdString());
+                }
+                else if ( (itr > 1) && (val <= 0) ) {
+                    err_msg = disp_data.label_dub[itr]->whatsThis() + " must be >= 0";
+                    throw invalid_argument(err_msg.toStdString());
+                }
+                else {
+                    *disp_data.label_dubvals[itr] = val;
+                    setCalcFlag(true);
+                }
+            }
+            catch (const invalid_argument &err_exc) {
+                disp_data.label_outputMsg->setText( err_exc.what() );
+            }
+            // Reset input field
+            param_input.input_dub[itr]->setText(""); // Resets isModified
+        }
+    }
 
     // Read values with type int
+    int valI;
     for (uint itr = 0; itr < param_input.input_int.size(); itr++) {
         if (param_input.input_int[itr]->isModified()) {
-            *disp_data.label_intvals[itr] = param_input.input_int[itr]->text().toInt();
-            param_input.input_int[itr]->setText("");
-            setCalcFlag(true);
+
+            // Argument checking
+            try {
+                valI = param_input.input_int[itr]->text().toInt(&convert_flag);
+                if (!convert_flag) {
+                    err_msg = disp_data.label_int[itr]->whatsThis() + " must be an integer";
+                }
+                else if (valI <= 1) {
+                    err_msg = disp_data.label_int[itr]->whatsThis() + " must be > 1";
+                }
+                else {
+                    *disp_data.label_intvals[itr] = valI;
+                    setCalcFlag(true);
+                }
+            }
+            catch (const invalid_argument &err_exc) {
+                disp_data.label_outputMsg->setText( err_exc.what() );
+            }
+            // Reset input field
+            param_input.input_int[itr]->setText(""); // Resets isModified
         };
     };
 
@@ -411,7 +453,6 @@ void SetImage::updateTimeDisplayElem(string field) {
 
 void SetImage::updateTimeDisplay() {
     for (const auto& [key, value] : disp_data.time_data) {
-        cout << "Updating: " << key << endl;
         updateTimeDisplayElem(key);
     }
 

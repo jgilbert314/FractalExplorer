@@ -35,8 +35,8 @@ ImageViewer::ImageViewer(QWidget *parent)
 
 
     // TESTING
-    ui->tab_2->layout()->addWidget(lcdPanelM);
-    ui->tab_4->layout()->addWidget(lcdPanelP);
+    ui->tab_1->layout()->addWidget(lcdPanelM);
+    ui->tab_3->layout()->addWidget(lcdPanelP);
     // TESTING - end
 
 
@@ -46,6 +46,8 @@ ImageViewer::ImageViewer(QWidget *parent)
     mapImage.setParamVals(label_dubvals);
 
     // Initialize Display labels
+    mapImage.disp_data.label_outputMsg = ui->label_outputM;
+    //vector<QLabel*> name_dub{ui->label_M_Ro, ui->label_M_Io, ui->label_M_Rs, ui->label_M_Is};
     vector<QLabel*> label_dub{ui->label_M_RoV, ui->label_M_IoV, ui->label_M_RsV, ui->label_M_IsV};
     vector<QLabel*> label_int{ui->label_M_NRV, ui->label_M_NIV, ui->label_M_NKV};
     mapImage.disp_data.label_image = ui->imageLabelM;
@@ -64,6 +66,8 @@ ImageViewer::ImageViewer(QWidget *parent)
     mapImage.initImage('M'); // M for Map
     mapImage.updateParamDisp();
 
+
+
     /// Point Set
     // Connect display values
     vector<double*> label_dubvalsP{&pointImage.getRo(), &pointImage.getIo(), &pointImage.getRs(), &pointImage.getIs(), &pointImage.getCR(), &pointImage.getCI()};
@@ -71,6 +75,8 @@ ImageViewer::ImageViewer(QWidget *parent)
 
     // Initialize Display labels
     pointImage.disp_data.label_image = ui->imageLabelP;
+    pointImage.disp_data.label_outputMsg = ui->label_outputP;
+    //vector<QLabel*> name_dubP{ui->label_P_Ro, ui->label_P_Io, ui->label_P_Rs, ui->label_P_Is};
     vector<QLabel*> label_dubP{ui->label_P_RoV, ui->label_P_IoV, ui->label_P_RsV, ui->label_P_IsV, ui->label_P_CrV, ui->label_P_CiV};
     vector<QLabel*> label_intP{ui->label_P_NRV, ui->label_P_NIV, ui->label_P_NKV};
     pointImage.setParamLabels(label_dubP, label_intP);
@@ -262,11 +268,13 @@ void ImageViewer::updateSet()
 
         palM.setColor(QPalette::Window, Qt::green);
         mapImage.updateTimeDisplay();
+        mapImage.disp_data.label_outputMsg->setText( "Program Messages" );
     } else {
         palM.setColor(QPalette::Window, Qt::red);
     }
     ui->calcLabelM_u->setPalette(palM);
     mapImage.disp_data.time_data["update"].names_tag->setPalette(palM);
+
 
 
     // Point Set
@@ -280,6 +288,7 @@ void ImageViewer::updateSet()
 
         palP.setColor(QPalette::Window, Qt::green);
         pointImage.updateTimeDisplay();
+        pointImage.disp_data.label_outputMsg->setText( "Program Messages" );
     } else {
         palP.setColor(QPalette::Window, Qt::red);
     }

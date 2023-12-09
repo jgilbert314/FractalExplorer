@@ -77,6 +77,7 @@ public:
         vector<QLabel*> label_int;
         vector<double*> label_dubvals;
         vector<int*> label_intvals;
+        QLabel* label_outputMsg;
 
         map<string, TimeData> time_data; // TODO: setter function
     };
