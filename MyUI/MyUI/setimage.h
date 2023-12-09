@@ -3,6 +3,8 @@
 
 #include <QLabel>
 #include <QLineEdit>
+#include <QLCDNumber>
+
 #include <QString>
 
 #include <cmath>
@@ -24,6 +26,8 @@ class SetImage
 {
 public:
     SetImage();
+
+
     struct SetParam {
         double Ro, Io, Rs, Is;
         double bound_RL, bound_RU, bound_IL, bound_IU;
@@ -58,42 +62,64 @@ public:
     void setCalcFlag(bool flag_val) { updateSetFlag = flag_val; }
 
 
+    /*! Struct for storing timing data */
+    struct TimeData {
+        QLabel* names_tag;  // Labels for name display
+        QLCDNumber* names_val; // Labels for value display
+        duration<double> time_val; // Result of time measurement
+    };
+
+
+    /*! Label names and values for parameter displays */
     struct DispData {
         QLabel* label_image;
         vector<QLabel*> label_dub;
         vector<QLabel*> label_int;
         vector<double*> label_dubvals;
         vector<int*> label_intvals;
+
+        map<string, TimeData> time_data; // TODO: setter function
     };
     DispData disp_data;
 
+
+    /*! Label names for parameter input */
     struct ParamInput {
         vector<QLineEdit*> input_dub;
         vector<QLineEdit*> input_int;
     };
     ParamInput param_input;
 
+
+    /*! Vectors storing real/imaginary components of image coordinates */
     struct AxesData {
         vector<double> r_vals;
         vector<double> i_vals;
     };
     AxesData axes_data;
 
+
     void initImage(char set_type);
 
+
+    // Set Calculations
     void calcSet();
     vector<double> mandelbrot_calc();
-
+    vector<double> julia_calc();
+    // Intermediate calculations
     vector<double> mag_calc(vector<double> &Z_vals);
     void linspace(vector<double> &lin_vec, double bound_L, double bound_U, uint N);
 
 
     // UI Functions
     void updateParamDisp();
+    void updateTimeDisplayElem(string field);
+    void updateTimeDisplay();
     void readParamInput();
     void setParamVals(vector<double*> label_dubvals);
     void setParamLabels(vector<QLabel*> label_dub, vector<QLabel*> label_int);
     void setParamInput(vector<QLineEdit*> input_dub, vector<QLineEdit*> input_int);
+
 
     // Coordinate functions
     /*! Updates bounds from center-span coordinates */
@@ -103,10 +129,10 @@ public:
     /*! Scales and updates span coordinates */
     void zoomImage(double scale);
 
+
     // Pixel/c-constant functions
     vector<double> calcConstFromInd(int nR, int nI);
     vector<double> pixelToConst(QWidget* im_target);
-
 
 
     // Image Functions
@@ -114,6 +140,7 @@ public:
     vector<unsigned int> formBitMap(vector<double> z_set);
     vector<QColor> calcHSV(int s_val, int v_val, int N);
 
+    /*! Pointer to set calculation function -- configurable */
     vector<double> (SetImage::*setDefFunc)(); // TODO: create subclasses of SetImage (map and point) -- one for each set function?
 
 private:
@@ -125,7 +152,3 @@ private:
 };
 
 #endif // SETIMAGE_H
-
-
-/*! \fn calcSet */
-

@@ -58,12 +58,18 @@ void SetImage::calcSet() {
     vector<double> z_set = (this->*setDefFunc)(); // TODO: create subclasses of SetImage (map and point) -- one for each set function?
 
     auto t1 = high_resolution_clock::now();
-    duration<double> time_val = t1 - t0;
-    cout << "Comp time: " << time_val.count() << endl;
+    disp_data.time_data["calc"].time_val = t1 - t0;
 
-
+    t0 = high_resolution_clock::now();
     vector<unsigned int> b_set = formBitMap(z_set);
+    t1 = high_resolution_clock::now();
+    disp_data.time_data["bitmap"].time_val = t1 - t0;
+
+    t0 = high_resolution_clock::now();
     updateImage(b_set);
+    t1 = high_resolution_clock::now();
+    disp_data.time_data["image"].time_val = t1 - t0;
+
     updateParamDisp();
     updateDelC();
 
@@ -73,7 +79,7 @@ void SetImage::calcSet() {
 };
 
 
-/*! Calculates mandelbrot set */
+/*! Calculates Mandelbrot set */
 vector<double> SetImage::mandelbrot_calc() {
 
     int N_R = axes_data.r_vals.size();
@@ -107,6 +113,57 @@ vector<double> SetImage::mandelbrot_calc() {
 };
 
 
+/* Calculates Julia set */
+vector<double> SetImage::julia_calc()
+{
+
+    int N_R = axes_data.r_vals.size();
+    int N_I = axes_data.i_vals.size();
+    int N = N_R*N_I;
+
+    int K = set_param.num_K;
+
+    double R_old, I_old;
+    int ind;
+
+    // Initialize output (z_0)
+    vector<double> Z_vals(2*N);
+    #pragma omp parallel for private(ind)
+    for (int itrR = 0; itrR < N_R; itrR++) {
+        for (int itrI = 0; itrI < N_I; itrI++) {
+            ind = itrR*N_I + itrI;
+            Z_vals[ind] = axes_data.r_vals[itrR];
+            Z_vals[ind+N] = axes_data.i_vals[itrI];
+        }
+    };
+
+    // For each iteration, calculate the next value z_{n+1}
+    // This approach is more ammenable to vectorization
+    // (distributes blocks of pixels rather than blocks of loops)
+    for (int itrK = 0; itrK < K; itrK++) {
+    #pragma omp parallel for simd private(ind) private(R_old) private(I_old)
+        for (int itrR = 0; itrR < N_R; itrR++) {
+            for (int itrI = 0; itrI < N_I; itrI++) {
+                ind = itrR*N_I + itrI;
+
+                R_old = Z_vals[ind];
+                I_old = Z_vals[ind+N];
+
+                // Real component
+                Z_vals[ind] = (R_old*R_old - I_old*I_old) + set_param.cR;
+                // Imag component
+                Z_vals[ind+N] = (2*R_old*I_old) + set_param.cI;
+                }
+            }
+        }
+
+
+
+    return Z_vals;
+
+};
+
+
 /*! Calculates a vector of equally spaced points */
 void SetImage::linspace(vector<double> &lin_vec, double bound_L, double bound_U, uint N) {
 
@@ -121,7 +178,7 @@ void SetImage::linspace(vector<double> &lin_vec, double bound_L, double bound_U,
     // Distance between points in set
     double dist = (bound_U - bound_L) / (N - 1);
     // Calculate points in set
-    if (lin_vec.size() != N) {
+    if (lin_vec.size() != N) { // Check if requested size exceeds allocated memory
         lin_vec.resize(N);
     }
     for (uint itr = 0; itr < N; itr++) {
@@ -222,6 +279,8 @@ void SetImage::initImage(char set_type) { // ModParam
         set_param.num_I = 100;
         set_param.num_K = 100;
         updateDelC();
+
+        setDefFunc = &SetImage::julia_calc; // TODO: create subclasses of SetImage (map and point) -- one for each set function?
 
     } else {
         throw invalid_argument("Input must be 'M' for Map or 'P' for Point");
@@ -344,13 +403,29 @@ vector<double> SetImage::pixelToConst(QWidget* im_target)
 
 
 
+void SetImage::updateTimeDisplayElem(string field) {
+    disp_data.time_data[field].names_val->display( disp_data.time_data[field].time_val.count() );
+
+    return;
+}
+
+void SetImage::updateTimeDisplay() {
+    for (const auto& [key, value] : disp_data.time_data) {
+        cout << "Updating: " << key << endl;
+        updateTimeDisplayElem(key);
+    }
+
+    return;
+}
+
+
 
 /////////////////////////////////////////
 /// Image Methods
 /////////////////////////////////////////
 
 
-// Image writer
+/*! Image writer */
 void SetImage::updateImage(vector<unsigned int> &b_set) {
 
     vector<QColor> hsv_vec = calcHSV(200, 200, 255);
@@ -364,7 +439,7 @@ void SetImage::updateImage(vector<unsigned int> &b_set) {
             indC = set_param.num_I - (itrC + 1); // Image display is flipped by default
             val = b_set[set_param.num_I*itrR + itrC];
             col_val = qRgb(hsv_vec[val].red(), hsv_vec[val].green(), hsv_vec[val].blue());
-            imData.setPixel ( itrR, indC, col_val ); // TODO: doc says setPixel() is slow, try scanLine() or bits() instead
+            imData.setPixel( itrR, indC, col_val ); // TODO: doc says setPixel() is slow, try scanLine() or bits() instead
         }
     }
 

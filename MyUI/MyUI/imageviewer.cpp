@@ -1,6 +1,7 @@
 #include "imageviewer.h"
 #include "ui_imageviewer.h"
 #include "setimage.h"
+#include "lcdpanel.h"
 
 #include "../../AuxiliaryCode.h"
 
@@ -33,6 +34,12 @@ ImageViewer::ImageViewer(QWidget *parent)
     connect(ui->updateButton, &QPushButton::released, this, &ImageViewer::updateSet);
 
 
+    // TESTING
+    ui->tab_2->layout()->addWidget(lcdPanelM);
+    ui->tab_4->layout()->addWidget(lcdPanelP);
+    // TESTING - end
+
+
     /// Map Set
     // Connect display values
     vector<double*> label_dubvals{&mapImage.getRo(), &mapImage.getIo(), &mapImage.getRs(), &mapImage.getIs()};
@@ -48,6 +55,10 @@ ImageViewer::ImageViewer(QWidget *parent)
     vector<QLineEdit*> input_dub{ui->lineEdit_M_Ro, ui->lineEdit_M_Io, ui->lineEdit_M_Rs, ui->lineEdit_M_Is};
     vector<QLineEdit*> input_int{ ui->lineEdit_M_NR,  ui->lineEdit_M_NI,  ui->lineEdit_M_NK};
     mapImage.setParamInput(input_dub, input_int);
+
+    // Connect timing labels
+    // TODO: consider moving to SetImage
+    linkLCDTime(mapImage, lcdPanelM);
 
     // Set default values
     mapImage.initImage('M'); // M for Map
@@ -69,11 +80,14 @@ ImageViewer::ImageViewer(QWidget *parent)
     vector<QLineEdit*> input_intP{ui->lineEdit_P_NR, ui->lineEdit_P_NI, ui->lineEdit_P_NK};
     pointImage.setParamInput(input_dubP, input_intP);
 
+    // Connect timing labels
+    linkLCDTime(pointImage, lcdPanelP);
+
     // Set default values
     pointImage.initImage('P'); // P for Point
     pointImage.updateParamDisp();
 
-    // Generate default images
+    /// Generate default images
     updateSet();
 
     // TESTING - start
@@ -87,7 +101,18 @@ ImageViewer::~ImageViewer()
 }
 
 
+void ImageViewer::linkLCDTime(SetImage &setImage, LCDPanel* lcdPanel) {
 
+    map<string, LCDPanel::LabelLink>::iterator it;
+    string this_key;
+    for (it = lcdPanel->disp_map.begin(); it != lcdPanel->disp_map.end(); it++) {
+        this_key = it->first;
+        setImage.disp_data.time_data[this_key].names_tag = lcdPanel->disp_map[this_key].label;
+        setImage.disp_data.time_data[this_key].names_val = lcdPanel->disp_map[this_key].lcd;
+    };
+
+    return;
+}
 
 
 
@@ -106,7 +131,7 @@ void ImageViewer::keyPressEvent(QKeyEvent *event)
     };
 };
 
-// Mouse Input
+// Mouse Clicking
 void ImageViewer::mousePressEvent(QMouseEvent *event)
 {
     // Dec 01, 2023
@@ -116,9 +141,6 @@ void ImageViewer::mousePressEvent(QMouseEvent *event)
         if ( checkClickTarget(ui->imageLabelM) ) {
             QWidget* target_test = ui->imageLabelM;
             vector<double> cN = mapImage.pixelToConst(target_test);
-
-            ui->label_coord_R->setText( QString::number(cN[0], 'E', 6) ); // TODO: convert to function
-            ui->label_coord_I->setText( QString::number(cN[1], 'E', 6) );
 
             if (event->modifiers() & Qt::ShiftModifier) {
                     mapImage.setRo(cN[0]);
@@ -157,9 +179,6 @@ void ImageViewer::mouseMoveEvent(QMouseEvent *event)
         if ( checkClickTarget(target_test) ) {
             // TODO: convert to function
             vector<double> cN = mapImage.pixelToConst(target_test);
-
-            ui->label_coord_R->setText( QString::number(cN[0], 'E', 6) );
-            ui->label_coord_I->setText( QString::number(cN[1], 'E', 6) );
 
             pointImage.setCR(cN[0]);
             pointImage.setCI(cN[1]);
@@ -212,37 +231,9 @@ bool ImageViewer::checkClickTarget(QWidget* target_test) {
 
 
 
-// Image writer
-void ImageViewer::updateImage(QLabel* imSpace, vector<unsigned int> b_set, int num_R, int num_I)
-{
-
-    vector<QColor> hsv_vec = calcHSV(200, 200, 255);
-    QRgb col_val;
-
-    QImage imData(num_R, num_I, QImage::Format_RGB888);
-    unsigned int val;
-    int indC;
-    for (int itrR = 0; itrR < num_R; itrR++) {
-        for (int itrC = 0; itrC < num_I; itrC++) {
-            indC = num_I - (itrC + 1); // Image display is flipped by default
-            val = b_set[num_I*itrR + itrC];
-            col_val = qRgb(hsv_vec[val].red(), hsv_vec[val].green(), hsv_vec[val].blue());
-            imData.setPixel ( itrR, indC, col_val ); // TODO: doc says setPixel() is slow, try scanLine() or bits() instead
-        }
-    }
-
-
-    imSpace->setPixmap(QPixmap::fromImage(imData));
-    return;
-}
-
-
-
-
 void ImageViewer::updateSet()
 {
     // TODO:
-    //      - Check for parameter modification before update
     //      - Update to reuse set memory (z_set, c_set) instead of reallocating each time (compare time/memory usage)
 
     // Timing Init
@@ -261,58 +252,43 @@ void ImageViewer::updateSet()
     };
 
     // Map Set
-    QPalette palM = QPalette();
+    // TODO: convert to method in ImageViewer
+    QPalette palM = QPalette(); // TODO: add colour palette to SetImage
     if ( mapImage.getCalcFlag() ) {
         t0 = high_resolution_clock::now();
         mapImage.calcSet();
         t1 = high_resolution_clock::now();
-        time_map["calcTime_M"] = t1 - t0;
+        mapImage.disp_data.time_data["update"].time_val = t1 - t0;
 
-        ui->calcLabelM_V->display(time_map["calcTime_M"].count());
         palM.setColor(QPalette::Window, Qt::green);
-        mapImage.updateParamDisp();
+        mapImage.updateTimeDisplay();
     } else {
         palM.setColor(QPalette::Window, Qt::red);
     }
-    ui->calcLabelM->setPalette(palM);
+    ui->calcLabelM_u->setPalette(palM);
+    mapImage.disp_data.time_data["update"].names_tag->setPalette(palM);
 
 
     // Point Set
-    // TODO: convert to function (need to split Map/Point functions, or add function handle as local variable)
-    QPalette palP = QPalette();
+    // TODO: convert to method in ImageViewer
+    QPalette palP = QPalette(); // TODO: add colour palette to SetImage
     if ( pointImage.getCalcFlag() ) {
-        pointImage.setCalcFlag(false);
-
-        pointImage.calcSpanCoords();
-        vector<double> r_valsP = linspace(pointImage.getBRL(), pointImage.getBRU(), pointImage.getNR());
-        vector<double> i_valsP = linspace(pointImage.getBIL(), pointImage.getBIU(), pointImage.getNI());
-        pointImage.linspace(i_valsP, pointImage.getBIL(), pointImage.getBIU(), pointImage.getNI());
         t0 = high_resolution_clock::now();
-        vector<double> p_set = pointSet_calcV(r_valsP, i_valsP, pointImage.getCR(), pointImage.getCI(), pointImage.getNK());
+        pointImage.calcSet();
         t1 = high_resolution_clock::now();
-        time_map["calcTime_P"] = t1 - t0;
-        ui->calcLabelP_V->display(time_map["calcTime_P"].count());
-
-        vector<unsigned int> b_setP = formBitMap(p_set);
-        updateImage(ui->imageLabelP, b_setP, pointImage.getNR(), pointImage.getNI());
-        pointImage.updateParamDisp();
-        pointImage.updateDelC();
+        pointImage.disp_data.time_data["update"].time_val = t1 - t0;
 
         palP.setColor(QPalette::Window, Qt::green);
+        pointImage.updateTimeDisplay();
     } else {
         palP.setColor(QPalette::Window, Qt::red);
     }
-    ui->calcLabelP->setPalette(palP);
+    ui->calcLabelP_u->setPalette(palP);
+    pointImage.disp_data.time_data["update"].names_tag->setPalette(palP);
 
     auto tFF = high_resolution_clock::now();
     time_map["setUpdate"] = tFF - t00;
-    /*
-    // Write times (DEBUGGING)
-    for (const auto& [key, value] : time_map) {
-        cout << key << ": " << value.count() << endl;
-    }
-    cout << endl;
-    */
+
     return;
 };
 
@@ -360,7 +336,8 @@ vector<QColor> ImageViewer::calcHSV(int s_val, int v_val, int N) {
     vector<double> cos_vec(N);
     for (uint itr = 0; itr < cos_vec.size(); itr++) {
         cos_vec[itr] = ( cos(omega*itr/N) );
-        h_vec[itr] = h_vec[itr]*cos_vec[itr]*cos_vec[itr];
+        //h_vec[itr] = h_vec[itr]*cos_vec[itr]*cos_vec[itr];
+        h_vec[itr] = N_h*cos_vec[itr]*cos_vec[itr];
     };
 
 

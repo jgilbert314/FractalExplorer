@@ -2,6 +2,7 @@
 #define IMAGEVIEWER_H
 
 #include "setimage.h"
+#include "lcdpanel.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -37,7 +38,8 @@ public:
     ImageViewer(QWidget *parent = nullptr);
     ~ImageViewer();
 
-    void updateImage(QLabel* imSpace, vector<unsigned int> b_set, int num_R, int num_I); \
+    void linkLCDTime(SetImage &setImage, LCDPanel* lcdPanel); // TODO: move to SetImage
+    void updateImage(QLabel* imSpace, vector<unsigned int> b_set, int num_R, int num_I);
     void updateParamDisplay(double bound_RL, double bound_RU, double bound_IL, double bound_IU, int num_R, int num_I, int num_K);
 
     bool checkClickTarget(QWidget* targ_test);
@@ -45,6 +47,11 @@ public:
     void testPalette();
     vector<QColor> calcHSV(int s_val, int v_val, int N);
 
+    LCDPanel lcdPanelM_main;
+    LCDPanel* lcdPanelM = &lcdPanelM_main;
+
+    LCDPanel lcdPanelP_main;
+    LCDPanel* lcdPanelP = &lcdPanelP_main;
 
 private slots:
     void updateSet();
@@ -58,9 +65,13 @@ private:
     bool initFlag;
 
 protected:
-    void keyPressEvent(QKeyEvent *event) override; /*! Handles keyboard input */
-    void mousePressEvent(QMouseEvent *event) override; /*! Handles mouse clicks */
-    void mouseMoveEvent(QMouseEvent *event) override; /*! Handles mouse movement */
-    void wheelEvent(QWheelEvent *event) override; /*! Handles mouse scroll */
+    /*! Handles keyboard input */
+    void keyPressEvent(QKeyEvent *event) override;
+    /*! Handles mouse clicks */
+    void mousePressEvent(QMouseEvent *event) override;
+    /*! Handles mouse movement */
+    void mouseMoveEvent(QMouseEvent *event) override;
+    /*! Handles mouse scroll */
+    void wheelEvent(QWheelEvent *event) override;
 };
 #endif // IMAGEVIEWER_H
