@@ -189,7 +189,7 @@ vector<unsigned int> formBitMap(vector<double> z_set) {
     // Calculate image height values
     double max_val = 0;
     vector<double> m_set = mag_calc(z_set);
-    for (int itr = 0; itr < m_set.size(); itr++) {
+    for (uint itr = 0; itr < m_set.size(); itr++) {
 		if ( isnan(m_set[itr]) ) {
 			m_set[itr] = 0;
 		}
@@ -204,7 +204,7 @@ vector<unsigned int> formBitMap(vector<double> z_set) {
     // Convert to bit values
     vector<unsigned int> b_set(m_set.size());
 	if (max_val != 0) { // max_val == 0 when all m_set is zero, no need to compute
-		for (int itr = 0; itr < m_set.size(); itr++) {
+        for (uint itr = 0; itr < m_set.size(); itr++) {
 			b_set[itr] = (m_set[itr] / max_val)*255;
 		}
 	}
@@ -277,7 +277,7 @@ vector< complex<double> > mandelbrot_calc(vector<complex<double>> c, int N) {
 	// Loop though c first, to allow each value to be 
 	// kept in a smaller object 
 	#pragma omp parallel for
-	for (int itrC = 0; itrC < output.size(); itrC++) {
+    for (uint itrC = 0; itrC < output.size(); itrC++) {
 		
 		auto this_c = c[itrC];
 		auto& this_z = output[itrC];
@@ -314,11 +314,11 @@ vector< complex<double> > point_calc(vector<complex<double>> z_set, complex<doub
 	// Loop though c first, to allow each value to be 
 	// kept in a smaller object 
 	#pragma omp parallel for
-	for (int itrC = 0; itrC < output.size(); itrC++) {
+    for (uint itrC = 0; itrC < output.size(); itrC++) {
 		
 		auto& this_z = output[itrC];
 
-		for (int itrN = 1; itrN < N; itrN++) {
+        for (int itrN = 1; itrN < N; itrN++) {
 			this_z = this_z*this_z + c_0;
 		}
 	}

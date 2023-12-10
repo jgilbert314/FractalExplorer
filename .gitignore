@@ -1,0 +1,22 @@
+# Misc
+Ideas.md
+
+# Exectutables
+build*
+
+# Generated Documentation
+doc/
+html/
+latex/
+*.docx
+
+# Output
+*.log
+*.dat
+*.out
+
+# VScode project config
+.vscode/
+
+# Qt Builds
+MyUI/build*

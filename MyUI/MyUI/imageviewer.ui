@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1220</width>
-    <height>683</height>
+    <height>729</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -24,56 +24,34 @@
     <bool>true</bool>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="1" column="4" rowspan="3">
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
+    <item row="2" column="3">
+     <widget class="QLabel" name="label_outputM">
+      <property name="autoFillBackground">
+       <bool>false</bool>
       </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
       </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>68</width>
-         <height>595</height>
-        </rect>
-       </property>
-       <widget class="QLabel" name="label_colourPalette">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>21</y>
-          <width>311</width>
-          <height>581</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="autoFillBackground">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </widget>
+      <property name="text">
+       <string>Program Messages</string>
+      </property>
      </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="QTabWidget" name="tabWidget_2">
+    <item row="4" column="3">
+     <widget class="QLabel" name="label_outputP">
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Program Messages</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="2">
+     <widget class="QTabWidget" name="tabWidget">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
         <horstretch>0</horstretch>
@@ -83,37 +61,69 @@
       <property name="currentIndex">
        <number>0</number>
       </property>
-      <widget class="QWidget" name="tab_3">
+      <property name="usesScrollButtons">
+       <bool>false</bool>
+      </property>
+      <property name="tabBarAutoHide">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="tab_1">
        <attribute name="title">
         <string>Diagnostics</string>
        </attribute>
-       <layout class="QFormLayout" name="formLayout_2"/>
+       <layout class="QFormLayout" name="formLayout"/>
       </widget>
-      <widget class="QWidget" name="tab_4">
+      <widget class="QWidget" name="tab_2">
        <attribute name="title">
         <string>Tab 2</string>
        </attribute>
-       <layout class="QFormLayout" name="formLayout_4">
+       <layout class="QFormLayout" name="formLayout_3">
         <item row="0" column="0">
-         <widget class="QGroupBox" name="diagBoxP">
+         <widget class="QGroupBox" name="diagBoxM">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
-          <property name="title">
-           <string>Point Diagnostics</string>
+          <property name="autoFillBackground">
+           <bool>false</bool>
           </property>
-          <layout class="QGridLayout" name="gridLayout_5">
-           <item row="0" column="0">
-            <widget class="QLabel" name="calcLabelP_u">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
+          <property name="title">
+           <string>Map Diagnostics</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="1" column="0">
+            <widget class="QLabel" name="calcLabelM_calc">
+             <property name="text">
+              <string>Calc</string>
              </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="calcLabelM_bit">
+             <property name="text">
+              <string>Bitmap</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLCDNumber" name="calcLabelM_u_V">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(0, 0, 0);
+</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="calcLabelM_imag">
+             <property name="text">
+              <string>Image</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="calcLabelM_u">
              <property name="autoFillBackground">
               <bool>true</bool>
              </property>
@@ -122,53 +132,24 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
-            <widget class="QLCDNumber" name="calcLabelP_u_V">
+           <item row="3" column="1">
+            <widget class="QLCDNumber" name="calcLabelM_imag_V">
              <property name="styleSheet">
               <string notr="true">background-color: rgb(0, 0, 0);
 </string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="calcLabelP_calc">
-             <property name="text">
-              <string>Calc</string>
              </property>
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="QLCDNumber" name="calcLabelP_calc_V">
+            <widget class="QLCDNumber" name="calcLabelM_calc_V">
              <property name="styleSheet">
               <string notr="true">background-color: rgb(0, 0, 0);
 </string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="calcLabelP_bit">
-             <property name="text">
-              <string>Bitmap</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="QLCDNumber" name="calcLabelP_bit_V">
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(0, 0, 0);
-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="calcLabelP_imag">
-             <property name="text">
-              <string>Image</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLCDNumber" name="calcLabelP_imag_V">
+            <widget class="QLCDNumber" name="calcLabelM_bit_V">
              <property name="styleSheet">
               <string notr="true">background-color: rgb(0, 0, 0);
 </string>
@@ -176,7 +157,7 @@
             </widget>
            </item>
            <item row="4" column="0">
-            <spacer name="verticalSpacer_4">
+            <spacer name="verticalSpacer_2">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
              </property>
@@ -430,40 +411,202 @@
       </layout>
      </widget>
     </item>
-    <item row="1" column="0">
-     <widget class="QScrollArea" name="scrollAreaM">
+    <item row="1" column="4" rowspan="3">
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="labelM">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>465</width>
-         <height>282</height>
+         <width>68</width>
+         <height>642</height>
         </rect>
        </property>
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="imageLabelM">
+       <widget class="QLabel" name="label_colourPalette">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>21</y>
+          <width>311</width>
+          <height>581</height>
+         </rect>
+        </property>
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="autoFillBackground">
+         <bool>true</bool>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+    <item row="3" column="1">
+     <widget class="QTabWidget" name="tabWidget_2">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Diagnostics</string>
+       </attribute>
+       <layout class="QFormLayout" name="formLayout_2"/>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Tab 2</string>
+       </attribute>
+       <layout class="QFormLayout" name="formLayout_4">
+        <item row="0" column="0">
+         <widget class="QGroupBox" name="diagBoxP">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="title">
+           <string>Point Diagnostics</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QLabel" name="calcLabelP_u">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="autoFillBackground">
+              <bool>true</bool>
+             </property>
+             <property name="text">
+              <string>Update</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLCDNumber" name="calcLabelP_u_V">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(0, 0, 0);
+</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="calcLabelP_calc">
+             <property name="text">
+              <string>Calc</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLCDNumber" name="calcLabelP_calc_V">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(0, 0, 0);
+</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="calcLabelP_bit">
+             <property name="text">
+              <string>Bitmap</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLCDNumber" name="calcLabelP_bit_V">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(0, 0, 0);
+</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="calcLabelP_imag">
+             <property name="text">
+              <string>Image</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLCDNumber" name="calcLabelP_imag_V">
+             <property name="styleSheet">
+              <string notr="true">background-color: rgb(0, 0, 0);
+</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QScrollArea" name="scrollAreaP">
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="labelP">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>465</width>
+         <height>321</height>
+        </rect>
+       </property>
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="imageLabelP">
           <property name="autoFillBackground">
            <bool>true</bool>
           </property>
           <property name="text">
-           <string>Map Set</string>
+           <string>Point Set</string>
           </property>
           <property name="scaledContents">
            <bool>true</bool>
@@ -472,32 +615,6 @@
         </item>
        </layout>
       </widget>
-     </widget>
-    </item>
-    <item row="2" column="3">
-     <widget class="QLabel" name="label_outputM">
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string>Program Messages</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="3">
-     <widget class="QLabel" name="label_outputP">
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string>Program Messages</string>
-      </property>
      </widget>
     </item>
     <item row="3" column="3">
@@ -756,161 +873,44 @@
       </layout>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QScrollArea" name="scrollAreaP">
+    <item row="1" column="0">
+     <widget class="QScrollArea" name="scrollAreaM">
       <property name="widgetResizable">
        <bool>true</bool>
       </property>
-      <widget class="QWidget" name="labelP">
+      <widget class="QWidget" name="labelM">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>0</x>
          <y>0</y>
          <width>465</width>
-         <height>282</height>
+         <height>290</height>
         </rect>
        </property>
        <property name="mouseTracking">
         <bool>true</bool>
        </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLabel" name="imageLabelP">
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>Point Set</string>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-    </item>
-    <item row="1" column="1" colspan="2">
-     <widget class="QTabWidget" name="tabWidget">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="currentIndex">
-       <number>0</number>
-      </property>
-      <property name="usesScrollButtons">
-       <bool>false</bool>
-      </property>
-      <property name="tabBarAutoHide">
-       <bool>false</bool>
-      </property>
-      <widget class="QWidget" name="tab_1">
-       <attribute name="title">
-        <string>Diagnostics</string>
-       </attribute>
-       <layout class="QFormLayout" name="formLayout"/>
-      </widget>
-      <widget class="QWidget" name="tab_2">
-       <attribute name="title">
-        <string>Tab 2</string>
-       </attribute>
-       <layout class="QFormLayout" name="formLayout_3">
-        <item row="0" column="0">
-         <widget class="QGroupBox" name="diagBoxM">
+         <widget class="QLabel" name="imageLabelM">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
           <property name="autoFillBackground">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
-          <property name="title">
-           <string>Map Diagnostics</string>
+          <property name="text">
+           <string>Map Set</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_3">
-           <item row="1" column="0">
-            <widget class="QLabel" name="calcLabelM_calc">
-             <property name="text">
-              <string>Calc</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="calcLabelM_bit">
-             <property name="text">
-              <string>Bitmap</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QLCDNumber" name="calcLabelM_u_V">
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(0, 0, 0);
-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="0">
-            <widget class="QLabel" name="calcLabelM_imag">
-             <property name="text">
-              <string>Image</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="calcLabelM_u">
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>Update</string>
-             </property>
-            </widget>
-           </item>
-           <item row="3" column="1">
-            <widget class="QLCDNumber" name="calcLabelM_imag_V">
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(0, 0, 0);
-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QLCDNumber" name="calcLabelM_calc_V">
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(0, 0, 0);
-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="1">
-            <widget class="QLCDNumber" name="calcLabelM_bit_V">
-             <property name="styleSheet">
-              <string notr="true">background-color: rgb(0, 0, 0);
-</string>
-             </property>
-            </widget>
-           </item>
-           <item row="4" column="0">
-            <spacer name="verticalSpacer_2">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>40</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-          </layout>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
          </widget>
         </item>
        </layout>

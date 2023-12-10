@@ -6,7 +6,6 @@ LCDPanel::LCDPanel(QGroupBox *parent)
     : QGroupBox{parent}
 {
     setLayout(this_layout);
-    layout()->setObjectName("Layout");
 
     // LCD Background colour
     QPalette pal = QPalette();
@@ -15,7 +14,7 @@ LCDPanel::LCDPanel(QGroupBox *parent)
     QString root_name = "calcLabel_";                      // Object name root
     vector<QString> name_suff{"u", "calc", "bit", "imag"}; // Object name suffix
     vector<QString> label_text{"Update", "Calc", "Bitmap", "Image"};
-    vector<string> key_list{"update", "calc", "bitmap", "image"}; // Keys for map
+    vector<string> key_list{"update", "calc", "bitmap", "image"}; // Keys for map // TODO: create explicit link to data they represent
 
     uint N_w = name_suff.size(); // Number of LCD displays (rows)
 

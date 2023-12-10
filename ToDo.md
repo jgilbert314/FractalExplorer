@@ -12,7 +12,7 @@
 	- [x] Julia
 - Display
 	- Fix resizing of number fields
-	- Add stats on render time
+	- [x] Add stats on render time
 	- Add stats on mem usage
 - Controls
 	- Zoom
@@ -26,21 +26,23 @@
 		- exp(z^n)
 - Documentation
 - Error handling
+	- [ ] Input boxes
 - Refactor
 	- [x] Relabel Julia as Point
 	- [ ] Clean up Aux Code
-		- [x] Rename some functions (point -> pointSet)
-		- [x] Delete unused functions
 		- Migrate to SetImage
 
 
 ### Priority:
 
-- [x] Timing
-- [x] Refactoring
-	- [x] Display box class
-- 
-
+- [ ] Dock images
+- [ ] Colour control
+- [ ] Refactoring
+	- [ ] Subclass
+		- [x] LineEdit
+		- [ ] Input
+			- Need to set size policy to avoid resizing everything
+		- [ ] Point Set
 
 ### Working
 
@@ -50,16 +52,12 @@ To start off today I'd like to do some refactoring:
 - [x] Convert Point calc to function
 - [x] Minor formatting
 	- [ ] Add alpha to the status colours
-- [x] Try to implement subclasses
-	- Succeeded for LCDPanel groupbox
+- [ ] Try to implement subclasses
+	- 
 - [ ] Image docking
 
 For features:
 
-- [x] Flesh out timing display
-	- [x] Image update
-	- [x] Set calculation
-	- [x] Bitmap generation
 - [ ] Controls
 	- [ ] Colour palette
 		- [ ] Select
@@ -69,10 +67,10 @@ For features:
 - [ ] Resource Usage
 	- [ ] CPU
 		- [ ] Display
-		- [ ] Set max
+		- [ ] Set max cores
 	- [ ] Memory
 		- [ ] Display
-		- [ ] Set max
+		- [ ] Set max RAM
 
 
 Image docking
@@ -82,3 +80,12 @@ Image docking
 	- Subclass QLabel
 - Update control functions
 	- Mouse input needs to be from label coords
+
+Subclass SetImage
+- create basic class
+- function
+
+SetImage update:
+	- add linkLCD
+	- add InputPanel
+		- Vector is appropriate (all fields will be checked in sequence)

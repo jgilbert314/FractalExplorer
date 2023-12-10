@@ -52,16 +52,22 @@ OBJECTS_DIR   = ./
 
 ####### Files
 
-SOURCES       = ../MyUI/lcdpanel.cpp \
+SOURCES       = ../MyUI/inputpanel.cpp \
+		../MyUI/lcdpanel.cpp \
+		../MyUI/lineeditnumber.cpp \
 		../MyUI/main.cpp \
 		../MyUI/imageviewer.cpp \
 		../MyUI/setimage.cpp moc_imageviewer.cpp \
+		moc_inputpanel.cpp \
 		moc_lcdpanel.cpp
-OBJECTS       = lcdpanel.o \
+OBJECTS       = inputpanel.o \
+		lcdpanel.o \
+		lineeditnumber.o \
 		main.o \
 		imageviewer.o \
 		setimage.o \
 		moc_imageviewer.o \
+		moc_inputpanel.o \
 		moc_lcdpanel.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -149,8 +155,12 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		../MyUI/MyUI.pro ../MyUI/imageviewer.h \
+		../MyUI/inputpanel.h \
 		../MyUI/lcdpanel.h \
-		../MyUI/setimage.h ../MyUI/lcdpanel.cpp \
+		../MyUI/lineeditnumber.h \
+		../MyUI/setimage.h ../MyUI/inputpanel.cpp \
+		../MyUI/lcdpanel.cpp \
+		../MyUI/lineeditnumber.cpp \
 		../MyUI/main.cpp \
 		../MyUI/imageviewer.cpp \
 		../MyUI/setimage.cpp
@@ -353,8 +363,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../MyUI/imageviewer.h ../MyUI/lcdpanel.h ../MyUI/setimage.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../MyUI/lcdpanel.cpp ../MyUI/main.cpp ../MyUI/imageviewer.cpp ../MyUI/setimage.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../MyUI/imageviewer.h ../MyUI/inputpanel.h ../MyUI/lcdpanel.h ../MyUI/lineeditnumber.h ../MyUI/setimage.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../MyUI/inputpanel.cpp ../MyUI/lcdpanel.cpp ../MyUI/lineeditnumber.cpp ../MyUI/main.cpp ../MyUI/imageviewer.cpp ../MyUI/setimage.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../MyUI/imageviewer.ui $(DISTDIR)/
 
 
@@ -387,15 +397,23 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -fopenmp -O3 -std=gnu++11 -Wall -Wextra -dM -E -o moc_predefs.h /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_imageviewer.cpp moc_lcdpanel.cpp
+compiler_moc_header_make_all: moc_imageviewer.cpp moc_inputpanel.cpp moc_lcdpanel.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_imageviewer.cpp moc_lcdpanel.cpp
+	-$(DEL_FILE) moc_imageviewer.cpp moc_inputpanel.cpp moc_lcdpanel.cpp
 moc_imageviewer.cpp: ../MyUI/imageviewer.h \
 		../MyUI/setimage.h \
 		../MyUI/lcdpanel.h \
+		../MyUI/inputpanel.h \
+		../MyUI/lineeditnumber.h \
 		moc_predefs.h \
 		/usr/lib/qt5/bin/moc
 	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/jason/Code/Mandelbrot/Working/MyUI/build-MyUI-Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/jason/Code/Mandelbrot/Working/MyUI/MyUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../MyUI/imageviewer.h -o moc_imageviewer.cpp
+
+moc_inputpanel.cpp: ../MyUI/inputpanel.h \
+		../MyUI/lineeditnumber.h \
+		moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/jason/Code/Mandelbrot/Working/MyUI/build-MyUI-Desktop-Debug/moc_predefs.h -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/jason/Code/Mandelbrot/Working/MyUI/MyUI -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I. -I/usr/include/c++/11 -I/usr/include/x86_64-linux-gnu/c++/11 -I/usr/include/c++/11/backward -I/usr/lib/gcc/x86_64-linux-gnu/11/include -I/usr/local/include -I/usr/include/x86_64-linux-gnu -I/usr/include ../MyUI/inputpanel.h -o moc_inputpanel.cpp
 
 moc_lcdpanel.cpp: ../MyUI/lcdpanel.h \
 		moc_predefs.h \
@@ -423,26 +441,43 @@ compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_ui
 
 ####### Compile
 
+inputpanel.o: ../MyUI/inputpanel.cpp ../MyUI/inputpanel.h \
+		../MyUI/lineeditnumber.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o inputpanel.o ../MyUI/inputpanel.cpp
+
 lcdpanel.o: ../MyUI/lcdpanel.cpp ../MyUI/lcdpanel.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lcdpanel.o ../MyUI/lcdpanel.cpp
 
+lineeditnumber.o: ../MyUI/lineeditnumber.cpp ../MyUI/lineeditnumber.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o lineeditnumber.o ../MyUI/lineeditnumber.cpp
+
 main.o: ../MyUI/main.cpp ../MyUI/imageviewer.h \
 		../MyUI/setimage.h \
-		../MyUI/lcdpanel.h
+		../MyUI/lcdpanel.h \
+		../MyUI/inputpanel.h \
+		../MyUI/lineeditnumber.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../MyUI/main.cpp
 
 imageviewer.o: ../MyUI/imageviewer.cpp ../MyUI/imageviewer.h \
 		../MyUI/setimage.h \
 		../MyUI/lcdpanel.h \
+		../MyUI/inputpanel.h \
+		../MyUI/lineeditnumber.h \
 		ui_imageviewer.h \
 		../../AuxiliaryCode.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o imageviewer.o ../MyUI/imageviewer.cpp
 
-setimage.o: ../MyUI/setimage.cpp ../MyUI/setimage.h
+setimage.o: ../MyUI/setimage.cpp ../MyUI/setimage.h \
+		../MyUI/lcdpanel.h \
+		../MyUI/inputpanel.h \
+		../MyUI/lineeditnumber.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o setimage.o ../MyUI/setimage.cpp
 
 moc_imageviewer.o: moc_imageviewer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_imageviewer.o moc_imageviewer.cpp
+
+moc_inputpanel.o: moc_inputpanel.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_inputpanel.o moc_inputpanel.cpp
 
 moc_lcdpanel.o: moc_lcdpanel.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_lcdpanel.o moc_lcdpanel.cpp

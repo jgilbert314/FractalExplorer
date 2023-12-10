@@ -10,39 +10,67 @@ SetImage::SetImage()
     setCalcFlag(true);
 
     disp_data.label_intvals = {&set_param.num_R, &set_param.num_I, &set_param.num_K};
+    linkLCDTime(); // Connect widgets to values
+
 };
 
 
-void SetImage::setParamVals(vector<double*> label_dubvals) {
-    // Date: Dec 01, 2023
+void SetImage::linkLCDTime() {
 
-    // Pass values from ImageViewer to avoid SetImage access to UI
-    disp_data.label_dubvals = label_dubvals;
+    map<string, LCDPanel::LabelLink>::iterator it;
+    string this_key;
+    for (it = lcdPanel->disp_map.begin(); it != lcdPanel->disp_map.end(); it++) {
+        this_key = it->first;
+        disp_data.time_data[this_key].names_tag = lcdPanel->disp_map[this_key].label;
+        disp_data.time_data[this_key].names_val = lcdPanel->disp_map[this_key].lcd;
+    };
 
     return;
-};
-
-void SetImage::setParamLabels(vector<QLabel*> label_dub, vector<QLabel*> label_int) {
-    // Date: Dec 01, 2023
-
-    // Pass values from ImageViewer to avoid SetImage access to UI
-    disp_data.label_dub = label_dub;
-    disp_data.label_int = label_int;
-
-    return;
-};
+}
 
 
-void SetImage::setParamInput(vector<QLineEdit*> input_dub, vector<QLineEdit*> input_int) {
-    // Date: Dec 01, 2023
+void SetImage::linkTextInput() {
 
-    // Pass values from ImageViewer to avoid SetImage access to UI
-    param_input.input_dub = input_dub;
-    param_input.input_int = input_int;
+    uint N_int = 0;
+    uint N_dub = 0;
+    uint t_flag;
+    for (uint itr = 0; itr < inputPanel->input_list.size(); itr++) {
+        t_flag = inputPanel->input_list[itr]->in_type;
+        if (t_flag == 0) { // Integer
+            N_int++;
+        } else if (t_flag == 1) { // Double
+            N_dub++;
+        }
+    }
 
-    return;
-};
+    disp_data.label_int.resize(N_int);
+    disp_data.label_intvals.resize(N_int);
+    param_input.input_int.resize(N_int);
 
+    disp_data.label_dub.resize(N_dub);
+    disp_data.label_dubvals.resize(N_dub);
+    param_input.input_dub.resize(N_dub);
+
+    uint indI = 0;
+    uint indD = 0;
+    for (uint itr = 0; itr < inputPanel->input_list.size(); itr++) {
+        t_flag = inputPanel->input_list[itr]->in_type;
+        if (t_flag == 0) {
+            disp_data.label_int[indI] = inputPanel->value_list[itr];
+            param_input.input_int[indI] = inputPanel->input_list[itr];
+
+            indI++;
+        }
+        else if (t_flag == 1) {
+            disp_data.label_dub[indD] = inputPanel->value_list[itr];
+            param_input.input_dub[indD] = inputPanel->input_list[itr];
+
+            indD++;
+        }
+    }
+
+
+}
 
 
 /////////////////////////////////////////
@@ -260,6 +288,11 @@ void SetImage::initImage(char set_type) { // ModParam
         set_param.num_K = 100;
         updateDelC();
 
+        vector<QString> name_list = {"Ro", "Io", "Rs", "Is", "NR", "NI", "NK"};
+        vector<char> spec_list = {'d', 'd', 's', 's', 'i', 'i', 'i'};
+        inputPanel->buildPanel(name_list, spec_list);
+
+        disp_data.label_dubvals = {&set_param.Ro, &set_param.Io, &set_param.Rs, &set_param.Is};
         setDefFunc = &SetImage::mandelbrot_calc; // TODO: create subclasses of SetImage (map and point) -- one for each set function?
 
     }
@@ -280,6 +313,11 @@ void SetImage::initImage(char set_type) { // ModParam
         set_param.num_K = 100;
         updateDelC();
 
+        vector<QString> name_list = {"Ro", "Io", "Rs", "Is", "cR", "cI", "NR", "NI", "NK"};
+        vector<char> spec_list = {'d', 'd', 's', 's', 'd', 'd', 'i', 'i', 'i'};
+        inputPanel->buildPanel(name_list, spec_list);
+
+        disp_data.label_dubvals = {&set_param.Ro, &set_param.Io, &set_param.Rs, &set_param.Is, &set_param.cR, &set_param.cI};
         setDefFunc = &SetImage::julia_calc; // TODO: create subclasses of SetImage (map and point) -- one for each set function?
 
     } else {
@@ -331,11 +369,11 @@ void SetImage::zoomImage(double scale) { // ModParam
 void SetImage::readParamInput() {
     // Dec 01, 2023
 
-    // TODO: refactoring -- add error checking to labels via subclass (float, int, span)
+    // TODO: refactoring -- compress by running loop on proxy vector and function handle (toDouble, toInt)
+
 
     // Values seperated by type due to QString limits
     // Read values with type double
-    double val;
     bool convert_flag = 1;
     QString err_msg;
     for (uint itr = 0; itr < param_input.input_dub.size(); itr++) {
@@ -343,19 +381,10 @@ void SetImage::readParamInput() {
 
             // Argument checking
             try {
-                val = param_input.input_dub[itr]->text().toDouble(&convert_flag);
-                if (!convert_flag) {
-                    err_msg = disp_data.label_dub[itr]->whatsThis() + " must be a number";
-                    throw invalid_argument(err_msg.toStdString());
-                }
-                else if ( (itr > 1) && (val <= 0) ) {
-                    err_msg = disp_data.label_dub[itr]->whatsThis() + " must be >= 0";
-                    throw invalid_argument(err_msg.toStdString());
-                }
-                else {
-                    *disp_data.label_dubvals[itr] = val;
-                    setCalcFlag(true);
-                }
+                param_input.input_dub[itr]->checkInput();
+
+                *disp_data.label_dubvals[itr] = param_input.input_dub[itr]->text().toDouble(&convert_flag);
+                setCalcFlag(true);
             }
             catch (const invalid_argument &err_exc) {
                 disp_data.label_outputMsg->setText( err_exc.what() );
@@ -366,23 +395,15 @@ void SetImage::readParamInput() {
     }
 
     // Read values with type int
-    int valI;
     for (uint itr = 0; itr < param_input.input_int.size(); itr++) {
         if (param_input.input_int[itr]->isModified()) {
 
             // Argument checking
             try {
-                valI = param_input.input_int[itr]->text().toInt(&convert_flag);
-                if (!convert_flag) {
-                    err_msg = disp_data.label_int[itr]->whatsThis() + " must be an integer";
-                }
-                else if (valI <= 1) {
-                    err_msg = disp_data.label_int[itr]->whatsThis() + " must be > 1";
-                }
-                else {
-                    *disp_data.label_intvals[itr] = valI;
-                    setCalcFlag(true);
-                }
+                param_input.input_int[itr]->checkInput();
+
+                *disp_data.label_intvals[itr] = param_input.input_int[itr]->text().toInt(&convert_flag);;
+                setCalcFlag(true);
             }
             catch (const invalid_argument &err_exc) {
                 disp_data.label_outputMsg->setText( err_exc.what() );
@@ -391,7 +412,6 @@ void SetImage::readParamInput() {
             param_input.input_int[itr]->setText(""); // Resets isModified
         };
     };
-
 
     return;
 };
@@ -447,7 +467,6 @@ vector<double> SetImage::pixelToConst(QWidget* im_target)
 
 void SetImage::updateTimeDisplayElem(string field) {
     disp_data.time_data[field].names_val->display( disp_data.time_data[field].time_val.count() );
-
     return;
 }
 
@@ -458,6 +477,7 @@ void SetImage::updateTimeDisplay() {
 
     return;
 }
+
 
 
 

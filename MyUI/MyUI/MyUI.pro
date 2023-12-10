@@ -21,14 +21,18 @@ QMAKE_CXXFLAGS_RELEASE *= -O3
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    inputpanel.cpp \
     lcdpanel.cpp \
+    lineeditnumber.cpp \
     main.cpp \
     imageviewer.cpp \
     setimage.cpp
 
 HEADERS += \
     imageviewer.h \
+    inputpanel.h \
     lcdpanel.h \
+    lineeditnumber.h \
     setimage.h
 
 FORMS += \

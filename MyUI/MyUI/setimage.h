@@ -7,6 +7,9 @@
 
 #include <QString>
 
+#include "lcdpanel.h"
+#include "inputpanel.h"
+
 #include <cmath>
 #include <vector>
 #include <iostream>
@@ -86,8 +89,8 @@ public:
 
     /*! Label names for parameter input */
     struct ParamInput {
-        vector<QLineEdit*> input_dub;
-        vector<QLineEdit*> input_int;
+        vector<LineEditNumber*> input_dub;
+        vector<LineEditNumber*> input_int;
     };
     ParamInput param_input;
 
@@ -117,9 +120,15 @@ public:
     void updateTimeDisplayElem(string field);
     void updateTimeDisplay();
     void readParamInput();
-    void setParamVals(vector<double*> label_dubvals);
-    void setParamLabels(vector<QLabel*> label_dub, vector<QLabel*> label_int);
-    void setParamInput(vector<QLineEdit*> input_dub, vector<QLineEdit*> input_int);
+
+    void linkLCDTime();
+    void linkTextInput();
+
+    // UI Elements
+    LCDPanel lcdPanel_main;
+    LCDPanel* lcdPanel = &lcdPanel_main;
+    InputPanel inputPanel_main;
+    InputPanel* inputPanel = &inputPanel_main;
 
 
     // Coordinate functions

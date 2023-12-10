@@ -3,6 +3,8 @@
 
 #include "setimage.h"
 #include "lcdpanel.h"
+#include "lineeditnumber.h"
+#include "inputpanel.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -23,7 +25,6 @@ using namespace std;
 using namespace chrono;
 
 
-
 QT_BEGIN_NAMESPACE
 namespace Ui { class ImageViewer; }
 QT_END_NAMESPACE
@@ -38,7 +39,6 @@ public:
     ImageViewer(QWidget *parent = nullptr);
     ~ImageViewer();
 
-    void linkLCDTime(SetImage &setImage, LCDPanel* lcdPanel); // TODO: move to SetImage
     void updateImage(QLabel* imSpace, vector<unsigned int> b_set, int num_R, int num_I);
     void updateParamDisplay(double bound_RL, double bound_RU, double bound_IL, double bound_IU, int num_R, int num_I, int num_K);
 
@@ -47,11 +47,6 @@ public:
     void testPalette();
     vector<QColor> calcHSV(int s_val, int v_val, int N);
 
-    LCDPanel lcdPanelM_main;
-    LCDPanel* lcdPanelM = &lcdPanelM_main;
-
-    LCDPanel lcdPanelP_main;
-    LCDPanel* lcdPanelP = &lcdPanelP_main;
 
 private slots:
     void updateSet();
@@ -59,7 +54,8 @@ private slots:
 private:
     Ui::ImageViewer *ui;
     QLabel *imageLabel;
-    QScrollArea *scrollArea;
+    QScrollArea *scrollAreaM;
+    QScrollArea *scrollAreaP;
     SetImage mapImage;
     SetImage pointImage;
     bool initFlag;

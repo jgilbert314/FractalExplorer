@@ -2,6 +2,7 @@
 #include "ui_imageviewer.h"
 #include "setimage.h"
 #include "lcdpanel.h"
+#include "lineeditnumber.h"
 
 #include "../../AuxiliaryCode.h"
 
@@ -14,6 +15,8 @@
 ImageViewer::ImageViewer(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::ImageViewer)
+    , scrollAreaM(new QScrollArea)
+    , scrollAreaP(new QScrollArea)
 {
     // TODO: initialize local variables
     //      - pixel arrays (need to check time vs mem for each approach)
@@ -33,64 +36,44 @@ ImageViewer::ImageViewer(QWidget *parent)
 
     connect(ui->updateButton, &QPushButton::released, this, &ImageViewer::updateSet);
 
+    // Add widgets from SetImage
+    ui->tab_1->layout()->addWidget(mapImage.lcdPanel);
+    ui->tab_3->layout()->addWidget(pointImage.lcdPanel);
 
-    // TESTING
-    ui->tab_1->layout()->addWidget(lcdPanelM);
-    ui->tab_3->layout()->addWidget(lcdPanelP);
-    // TESTING - end
+
+    ui->tab_1->layout()->addWidget(scrollAreaM);
+    scrollAreaM->setWidgetResizable(true);
+    scrollAreaM->setWidget(mapImage.inputPanel);
+    scrollAreaM->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
+
+    ui->tab_3->layout()->addWidget(scrollAreaP);
+    scrollAreaP->setWidgetResizable(true);
+    scrollAreaP->setWidget(pointImage.inputPanel);
+    scrollAreaP->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
 
     /// Map Set
-    // Connect display values
-    vector<double*> label_dubvals{&mapImage.getRo(), &mapImage.getIo(), &mapImage.getRs(), &mapImage.getIs()};
-    mapImage.setParamVals(label_dubvals);
-
     // Initialize Display labels
     mapImage.disp_data.label_outputMsg = ui->label_outputM;
-    //vector<QLabel*> name_dub{ui->label_M_Ro, ui->label_M_Io, ui->label_M_Rs, ui->label_M_Is};
-    vector<QLabel*> label_dub{ui->label_M_RoV, ui->label_M_IoV, ui->label_M_RsV, ui->label_M_IsV};
-    vector<QLabel*> label_int{ui->label_M_NRV, ui->label_M_NIV, ui->label_M_NKV};
     mapImage.disp_data.label_image = ui->imageLabelM;
-    mapImage.setParamLabels(label_dub, label_int);
-
-    // Initialize input fields
-    vector<QLineEdit*> input_dub{ui->lineEdit_M_Ro, ui->lineEdit_M_Io, ui->lineEdit_M_Rs, ui->lineEdit_M_Is};
-    vector<QLineEdit*> input_int{ ui->lineEdit_M_NR,  ui->lineEdit_M_NI,  ui->lineEdit_M_NK};
-    mapImage.setParamInput(input_dub, input_int);
-
-    // Connect timing labels
-    // TODO: consider moving to SetImage
-    linkLCDTime(mapImage, lcdPanelM);
 
     // Set default values
+    // TODO: subclass and include in constructor
     mapImage.initImage('M'); // M for Map
+    mapImage.linkTextInput();
     mapImage.updateParamDisp();
 
 
 
     /// Point Set
-    // Connect display values
-    vector<double*> label_dubvalsP{&pointImage.getRo(), &pointImage.getIo(), &pointImage.getRs(), &pointImage.getIs(), &pointImage.getCR(), &pointImage.getCI()};
-    pointImage.setParamVals(label_dubvalsP);
-
     // Initialize Display labels
     pointImage.disp_data.label_image = ui->imageLabelP;
     pointImage.disp_data.label_outputMsg = ui->label_outputP;
-    //vector<QLabel*> name_dubP{ui->label_P_Ro, ui->label_P_Io, ui->label_P_Rs, ui->label_P_Is};
-    vector<QLabel*> label_dubP{ui->label_P_RoV, ui->label_P_IoV, ui->label_P_RsV, ui->label_P_IsV, ui->label_P_CrV, ui->label_P_CiV};
-    vector<QLabel*> label_intP{ui->label_P_NRV, ui->label_P_NIV, ui->label_P_NKV};
-    pointImage.setParamLabels(label_dubP, label_intP);
-
-    // Initialize input fields
-    vector<QLineEdit*> input_dubP{ui->lineEdit_P_Ro, ui->lineEdit_P_Io, ui->lineEdit_P_Rs, ui->lineEdit_P_Is, ui->lineEdit_P_cR, ui->lineEdit_P_cI};
-    vector<QLineEdit*> input_intP{ui->lineEdit_P_NR, ui->lineEdit_P_NI, ui->lineEdit_P_NK};
-    pointImage.setParamInput(input_dubP, input_intP);
-
-    // Connect timing labels
-    linkLCDTime(pointImage, lcdPanelP);
 
     // Set default values
+    // TODO: subclass and include in constructor
     pointImage.initImage('P'); // P for Point
+    pointImage.linkTextInput();
     pointImage.updateParamDisp();
 
     /// Generate default images
@@ -99,27 +82,18 @@ ImageViewer::ImageViewer(QWidget *parent)
     // TESTING - start
     testPalette();
     // TESTING - end
+
+
+
 }
 
 ImageViewer::~ImageViewer()
 {
     delete ui;
+    // Assigned to layout -- handled by layout destructor
+    //delete scrollAreaM;
+    //delete scrollAreaP;
 }
-
-
-void ImageViewer::linkLCDTime(SetImage &setImage, LCDPanel* lcdPanel) {
-
-    map<string, LCDPanel::LabelLink>::iterator it;
-    string this_key;
-    for (it = lcdPanel->disp_map.begin(); it != lcdPanel->disp_map.end(); it++) {
-        this_key = it->first;
-        setImage.disp_data.time_data[this_key].names_tag = lcdPanel->disp_map[this_key].label;
-        setImage.disp_data.time_data[this_key].names_val = lcdPanel->disp_map[this_key].lcd;
-    };
-
-    return;
-}
-
 
 
 // Calculation Button
@@ -154,7 +128,7 @@ void ImageViewer::mousePressEvent(QMouseEvent *event)
             } else if (event->modifiers() & Qt::ControlModifier) {
                     pointImage.setCR(cN[0]);
                     pointImage.setCI(cN[1]);
-            };
+            }
             updateSet();
 
         } else if (checkClickTarget(ui->imageLabelP)) {
@@ -166,12 +140,10 @@ void ImageViewer::mousePressEvent(QMouseEvent *event)
                 pointImage.setIo(cN[1]);
 
                 updateSet();
-            };
-        } else {
-            cout << "Outside click" << endl << endl;
-        };
-    };
-};
+            }
+        }
+    }
+}
 
 
 
@@ -189,9 +161,7 @@ void ImageViewer::mouseMoveEvent(QMouseEvent *event)
             pointImage.setCR(cN[0]);
             pointImage.setCI(cN[1]);
             updateSet();
-        } else {
-            cout << "Outside click" << endl << endl;
-        };
+        }
     };
 };
 
@@ -241,6 +211,7 @@ void ImageViewer::updateSet()
 {
     // TODO:
     //      - Update to reuse set memory (z_set, c_set) instead of reallocating each time (compare time/memory usage)
+
 
     // Timing Init
     map<std::string, duration<double> > time_map; // For storing run times
