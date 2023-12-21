@@ -1,11 +1,12 @@
 # Misc
 Ideas.md
+Testing/build/
 
 # Exectutables
 build*
 
 # Generated Documentation
-doc/
+doc/*
 html/
 latex/
 *.docx

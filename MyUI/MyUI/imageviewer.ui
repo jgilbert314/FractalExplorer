@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1220</width>
+    <width>1222</width>
     <height>729</height>
    </rect>
   </property>
@@ -24,20 +24,137 @@
     <bool>true</bool>
    </property>
    <layout class="QGridLayout" name="gridLayout_2">
-    <item row="2" column="3">
-     <widget class="QLabel" name="label_outputM">
-      <property name="autoFillBackground">
+    <item row="1" column="4" rowspan="3">
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="widgetResizable">
        <bool>false</bool>
       </property>
-      <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
-      </property>
-      <property name="text">
-       <string>Program Messages</string>
-      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>85</width>
+         <height>628</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <item>
+         <widget class="QComboBox" name="comboBox">
+          <property name="editable">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_colourPalette">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>TextLabel</string>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
      </widget>
     </item>
-    <item row="4" column="3">
+    <item row="1" column="0">
+     <widget class="QScrollArea" name="scrollAreaM">
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="labelM">
+       <property name="enabled">
+        <bool>true</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>466</width>
+         <height>306</height>
+        </rect>
+       </property>
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout">
+        <item>
+         <widget class="QLabel" name="imageLabelM">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Map Set</string>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="QScrollArea" name="scrollAreaP">
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="labelP">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>466</width>
+         <height>305</height>
+        </rect>
+       </property>
+       <property name="mouseTracking">
+        <bool>true</bool>
+       </property>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="imageLabelP">
+          <property name="autoFillBackground">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>Point Set</string>
+          </property>
+          <property name="scaledContents">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="4" column="1">
      <widget class="QLabel" name="label_outputP">
       <property name="autoFillBackground">
        <bool>false</bool>
@@ -49,6 +166,19 @@
        <string>Program Messages</string>
       </property>
      </widget>
+    </item>
+    <item row="1" column="5">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item row="1" column="1" colspan="2">
      <widget class="QTabWidget" name="tabWidget">
@@ -176,289 +306,6 @@
       </widget>
      </widget>
     </item>
-    <item row="1" column="3">
-     <widget class="QGroupBox" name="groupBoxM">
-      <property name="title">
-       <string>Map Input</string>
-      </property>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_M_Ro">
-         <property name="mouseTracking">
-          <bool>false</bool>
-         </property>
-         <property name="toolTip">
-          <string extracomment="Center of real axis"/>
-         </property>
-         <property name="whatsThis">
-          <string>Real origin</string>
-         </property>
-         <property name="text">
-          <string>Ro</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="3">
-        <widget class="QLineEdit" name="lineEdit_M_Rs">
-         <property name="cursorMoveStyle">
-          <enum>Qt::LogicalMoveStyle</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="label_M_Is">
-         <property name="text">
-          <string>Is</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="3">
-        <widget class="QLineEdit" name="lineEdit_M_NR"/>
-       </item>
-       <item row="7" column="1">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLabel" name="label_M_NK">
-         <property name="text">
-          <string>N_K</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLabel" name="label_M_RsV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Real span value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLabel" name="label_M_NIV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Imaginary resolution value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLabel" name="label_M_IoV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Imaginary origin value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="3">
-        <widget class="QLineEdit" name="lineEdit_M_Io">
-         <property name="cursorMoveStyle">
-          <enum>Qt::LogicalMoveStyle</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QLineEdit" name="lineEdit_M_Is"/>
-       </item>
-       <item row="6" column="3">
-        <widget class="QLineEdit" name="lineEdit_M_NK"/>
-       </item>
-       <item row="11" column="3">
-        <widget class="QPushButton" name="updateButton">
-         <property name="text">
-          <string>Calculate</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLabel" name="label_M_NI">
-         <property name="text">
-          <string>N_I</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLabel" name="label_M_NRV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Real resolution value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_M_Rs">
-         <property name="text">
-          <string>Rs</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QLabel" name="label_M_NKV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Iteration value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="3">
-        <widget class="QLineEdit" name="lineEdit_M_NI"/>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLabel" name="label_M_IsV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Imaginary span value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="3">
-        <widget class="QLineEdit" name="lineEdit_M_Ro">
-         <property name="cursorMoveStyle">
-          <enum>Qt::LogicalMoveStyle</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="label_M_RoV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Real origin value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-         <property name="scaledContents">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="label_M_Io">
-         <property name="text">
-          <string>Io</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLabel" name="label_M_NR">
-         <property name="text">
-          <string>N_R</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="4" rowspan="3">
-     <widget class="QScrollArea" name="scrollArea">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="widgetResizable">
-       <bool>true</bool>
-      </property>
-      <widget class="QWidget" name="scrollAreaWidgetContents">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>68</width>
-         <height>642</height>
-        </rect>
-       </property>
-       <widget class="QLabel" name="label_colourPalette">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>21</y>
-          <width>311</width>
-          <height>581</height>
-         </rect>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Ignored" vsizetype="Ignored">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="autoFillBackground">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>TextLabel</string>
-        </property>
-        <property name="scaledContents">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </widget>
-     </widget>
-    </item>
     <item row="3" column="1">
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="sizePolicy">
@@ -582,339 +429,27 @@
       </widget>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="QScrollArea" name="scrollAreaP">
-      <property name="widgetResizable">
-       <bool>true</bool>
+    <item row="2" column="1">
+     <widget class="QLabel" name="label_outputM">
+      <property name="autoFillBackground">
+       <bool>false</bool>
       </property>
-      <widget class="QWidget" name="labelP">
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>465</width>
-         <height>321</height>
-        </rect>
-       </property>
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QLabel" name="imageLabelP">
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>Point Set</string>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="text">
+       <string>Program Messages</string>
+      </property>
      </widget>
     </item>
-    <item row="3" column="3">
-     <widget class="QGroupBox" name="groupBoxP">
-      <property name="title">
-       <string>Point Input</string>
+    <item row="3" column="5">
+     <widget class="QFrame" name="frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
       </property>
-      <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_Ro"/>
-       </item>
-       <item row="0" column="1">
-        <widget class="QLabel" name="label_P_RoV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Real origin value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="1">
-        <widget class="QLabel" name="label_P_NKV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Iteration value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
-        <widget class="QLabel" name="label_P_Is">
-         <property name="text">
-          <string>Is</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="1">
-        <widget class="QLabel" name="label_P_IsV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Imaginary span value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="8" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_NK"/>
-       </item>
-       <item row="7" column="0">
-        <widget class="QLabel" name="label_NI">
-         <property name="text">
-          <string>N_I</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_NR"/>
-       </item>
-       <item row="4" column="0">
-        <widget class="QLabel" name="label_P_cR">
-         <property name="text">
-          <string>cR</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_cR"/>
-       </item>
-       <item row="7" column="1">
-        <widget class="QLabel" name="label_P_NIV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Imaginary resolution value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_Io"/>
-       </item>
-       <item row="6" column="1">
-        <widget class="QLabel" name="label_P_NRV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Real resolution value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QLabel" name="label_P_CrV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Real comp value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_Is"/>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_Rs"/>
-       </item>
-       <item row="5" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_cI"/>
-       </item>
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_P_Ro">
-         <property name="text">
-          <string>Ro</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <widget class="QLabel" name="label_P_cI">
-         <property name="text">
-          <string>cI</string>
-         </property>
-        </widget>
-       </item>
-       <item row="7" column="2">
-        <widget class="QLineEdit" name="lineEdit_P_NI"/>
-       </item>
-       <item row="8" column="0">
-        <widget class="QLabel" name="label_NK">
-         <property name="text">
-          <string>N_K</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="label_P_IoV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Imaginary origin value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label_P_Io">
-         <property name="text">
-          <string>Io</string>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="1">
-        <widget class="QLabel" name="label_P_CiV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Imaginary comp value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="9" column="0">
-        <spacer name="verticalSpacer_3">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>40</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="2" column="0">
-        <widget class="QLabel" name="label_P_Rs">
-         <property name="text">
-          <string>Rs</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLabel" name="label_P_RsV">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Ignored" vsizetype="Preferred">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="whatsThis">
-          <string>Real span value</string>
-         </property>
-         <property name="text">
-          <string>&lt;NULL&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
-        <widget class="QLabel" name="label_P_NR">
-         <property name="text">
-          <string>N_R</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </item>
-    <item row="1" column="0">
-     <widget class="QScrollArea" name="scrollAreaM">
-      <property name="widgetResizable">
-       <bool>true</bool>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
       </property>
-      <widget class="QWidget" name="labelM">
-       <property name="enabled">
-        <bool>true</bool>
-       </property>
-       <property name="geometry">
-        <rect>
-         <x>0</x>
-         <y>0</y>
-         <width>465</width>
-         <height>290</height>
-        </rect>
-       </property>
-       <property name="mouseTracking">
-        <bool>true</bool>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="imageLabelM">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="autoFillBackground">
-           <bool>true</bool>
-          </property>
-          <property name="text">
-           <string>Map Set</string>
-          </property>
-          <property name="scaledContents">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
      </widget>
     </item>
    </layout>
@@ -924,7 +459,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1220</width>
+     <width>1222</width>
      <height>22</height>
     </rect>
    </property>
@@ -932,23 +467,6 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <tabstops>
-  <tabstop>lineEdit_M_Ro</tabstop>
-  <tabstop>lineEdit_M_Io</tabstop>
-  <tabstop>lineEdit_M_Rs</tabstop>
-  <tabstop>lineEdit_M_Is</tabstop>
-  <tabstop>lineEdit_M_NR</tabstop>
-  <tabstop>lineEdit_M_NI</tabstop>
-  <tabstop>lineEdit_M_NK</tabstop>
-  <tabstop>updateButton</tabstop>
-  <tabstop>lineEdit_P_Ro</tabstop>
-  <tabstop>lineEdit_P_Io</tabstop>
-  <tabstop>lineEdit_P_Rs</tabstop>
-  <tabstop>lineEdit_P_Is</tabstop>
-  <tabstop>lineEdit_P_cR</tabstop>
-  <tabstop>lineEdit_P_cI</tabstop>
-  <tabstop>lineEdit_P_NR</tabstop>
-  <tabstop>lineEdit_P_NI</tabstop>
-  <tabstop>lineEdit_P_NK</tabstop>
   <tabstop>scrollAreaP</tabstop>
   <tabstop>scrollAreaM</tabstop>
  </tabstops>

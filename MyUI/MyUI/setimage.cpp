@@ -6,12 +6,15 @@
 /////////////////////////////////////////
 
 SetImage::SetImage()
+    : lcdPanel(new LCDPanel)
+    , inputPanel(new InputPanel)
+    , colourSelect(new QComboBox)
 {
     setCalcFlag(true);
+    colrFlag = 1; // TESTING - colour
 
     disp_data.label_intvals = {&set_param.num_R, &set_param.num_I, &set_param.num_K};
     linkLCDTime(); // Connect widgets to values
-
 };
 
 
@@ -26,6 +29,23 @@ void SetImage::linkLCDTime() {
     };
 
     return;
+}
+
+
+SetImage::~SetImage() {
+
+    delete colourSelect;
+    colourSelect = nullptr;
+
+    if (lcdPanel != nullptr) {
+        delete lcdPanel;
+        lcdPanel = nullptr;
+    }
+    if (inputPanel != nullptr) {
+        delete inputPanel;
+        inputPanel = nullptr;
+    }
+
 }
 
 
@@ -83,7 +103,8 @@ void SetImage::calcSet() {
 
     linspace(axes_data.r_vals, set_param.bound_RL, set_param.bound_RU, set_param.num_R); // TODO: check if these need recomputed
     linspace(axes_data.i_vals, set_param.bound_IL, set_param.bound_IU, set_param.num_I);
-    vector<double> z_set = (this->*setDefFunc)(); // TODO: create subclasses of SetImage (map and point) -- one for each set function?
+    vector<double> z_set = setFunc();
+    //vector<double> z_set = (this->*setDefFunc)(); // TODO: create subclasses of SetImage (map and point) -- one for each set function?
 
     auto t1 = high_resolution_clock::now();
     disp_data.time_data["calc"].time_val = t1 - t0;
@@ -192,7 +213,6 @@ vector<double> SetImage::julia_calc()
 };
 
 
-/*! Calculates a vector of equally spaced points */
 void SetImage::linspace(vector<double> &lin_vec, double bound_L, double bound_U, uint N) {
 
     // Throw an error if the interval is improperly defined
@@ -269,67 +289,9 @@ vector<double> SetImage::mag_calc(vector<double> &Z_vals) {
 /// Parameter Methods
 /////////////////////////////////////////
 
-void SetImage::initImage(char set_type) { // ModParam
-
-    // TODO: specify setDefFunc for each
-
-    // Map Set
-    if (set_type == 'M') {
-        // Dec 01, 2023
-
-        set_param.Ro = 0;
-        set_param.Io = 0;
-        set_param.Rs = 4;
-        set_param.Is = 4;
-        calcSpanCoords();
-
-        set_param.num_R = 100;
-        set_param.num_I = 100;
-        set_param.num_K = 100;
-        updateDelC();
-
-        vector<QString> name_list = {"Ro", "Io", "Rs", "Is", "NR", "NI", "NK"};
-        vector<char> spec_list = {'d', 'd', 's', 's', 'i', 'i', 'i'};
-        inputPanel->buildPanel(name_list, spec_list);
-
-        disp_data.label_dubvals = {&set_param.Ro, &set_param.Io, &set_param.Rs, &set_param.Is};
-        setDefFunc = &SetImage::mandelbrot_calc; // TODO: create subclasses of SetImage (map and point) -- one for each set function?
-
-    }
-    // Point Set
-    else if (set_type == 'P') { // ModParam
-        // Dec 01, 2023
-        set_param.Ro = 0;
-        set_param.Io = 0;
-        set_param.Rs = 4;
-        set_param.Is = 4;
-        calcSpanCoords();
-
-        set_param.cR = 0.25;
-        set_param.cI = 0;
-
-        set_param.num_R = 100;
-        set_param.num_I = 100;
-        set_param.num_K = 100;
-        updateDelC();
-
-        vector<QString> name_list = {"Ro", "Io", "Rs", "Is", "cR", "cI", "NR", "NI", "NK"};
-        vector<char> spec_list = {'d', 'd', 's', 's', 'd', 'd', 'i', 'i', 'i'};
-        inputPanel->buildPanel(name_list, spec_list);
-
-        disp_data.label_dubvals = {&set_param.Ro, &set_param.Io, &set_param.Rs, &set_param.Is, &set_param.cR, &set_param.cI};
-        setDefFunc = &SetImage::julia_calc; // TODO: create subclasses of SetImage (map and point) -- one for each set function?
-
-    } else {
-        throw invalid_argument("Input must be 'M' for Map or 'P' for Point");
-    };
-
-        return;
-};
 
 
-
-void SetImage::updateDelC() { // ModParam
+void SetImage::updateDelC() {
     // Date: Dec 02, 2023
 
     set_param.dR = (set_param.bound_RU - set_param.bound_RL)/(set_param.num_R - 1);
@@ -340,7 +302,7 @@ void SetImage::updateDelC() { // ModParam
 
 
 
-void SetImage::calcSpanCoords() { // ModParam
+void SetImage::calcSpanCoords() {
     set_param.bound_RL = set_param.Ro - set_param.Rs/2;
     set_param.bound_RU = set_param.Ro + set_param.Rs/2;
     set_param.bound_IL = set_param.Io - set_param.Is/2;
@@ -348,6 +310,17 @@ void SetImage::calcSpanCoords() { // ModParam
 
     return;
 };
+
+
+void SetImage::panImage(double scaleR, double scaleI) {
+
+    set_param.Ro += set_param.Rs*scaleR;
+    set_param.Io += set_param.Is*scaleI;
+
+    setCalcFlag(true);
+
+    return;
+}
 
 
 void SetImage::zoomImage(double scale) { // ModParam
@@ -369,8 +342,10 @@ void SetImage::zoomImage(double scale) { // ModParam
 void SetImage::readParamInput() {
     // Dec 01, 2023
 
-    // TODO: refactoring -- compress by running loop on proxy vector and function handle (toDouble, toInt)
+    /// \todo Refactoring -- compress by running loop on proxy vector and function handle (toDouble, toInt)
 
+    void (SetImage::*this_ptr)(double);
+    double val = 0;
 
     // Values seperated by type due to QString limits
     // Read values with type double
@@ -383,7 +358,11 @@ void SetImage::readParamInput() {
             try {
                 param_input.input_dub[itr]->checkInput();
 
-                *disp_data.label_dubvals[itr] = param_input.input_dub[itr]->text().toDouble(&convert_flag);
+                this_ptr = disp_data.label_dubsets[itr];
+                val = param_input.input_dub[itr]->text().toDouble(&convert_flag);
+                (this->*this_ptr)(val); // Set parameter value
+                disp_data.label_dubvals[itr] = val; // Set display value
+
                 setCalcFlag(true);
             }
             catch (const invalid_argument &err_exc) {
@@ -420,8 +399,12 @@ void SetImage::readParamInput() {
 void SetImage::updateParamDisp() {
     // Dec 01, 2023
 
+    double (SetImage::*this_ptr)(); // Temp variable for clarity
+
+
     for (uint itr = 0; itr < disp_data.label_dub.size(); itr++) {
-        disp_data.label_dub[itr]->setText(QString::number( *disp_data.label_dubvals[itr] ));
+        this_ptr = disp_data.label_dubgets[itr];
+        disp_data.label_dub[itr]->setText(QString::number( (this->*this_ptr)() ));
     };
 
     for (uint itr = 0; itr < disp_data.label_int.size(); itr++) {
@@ -432,6 +415,7 @@ void SetImage::updateParamDisp() {
 };
 
 
+/// \todo update to pull from axes_data
 vector<double> SetImage::calcConstFromInd(int nR, int nI) {
     // Date: Dec 02, 2023
 
@@ -500,41 +484,90 @@ void SetImage::updateImage(vector<unsigned int> &b_set) {
             indC = set_param.num_I - (itrC + 1); // Image display is flipped by default
             val = b_set[set_param.num_I*itrR + itrC];
             col_val = qRgb(hsv_vec[val].red(), hsv_vec[val].green(), hsv_vec[val].blue());
-            imData.setPixel( itrR, indC, col_val ); // TODO: doc says setPixel() is slow, try scanLine() or bits() instead
+            imData.setPixel( itrR, indC, col_val ); /// \todo Doc says setPixel() is slow, try scanLine() or bits() instead
         }
     }
 
+    disp_data.label_image->setPixmap( QPixmap::fromImage(imData) );
 
-    disp_data.label_image->setPixmap(QPixmap::fromImage(imData));
     return;
+
 }
 
 
-// TESTING - consider creating colour class (?)
+/// \todo Rename or seperate HSV and grayscale functions
 vector<QColor> SetImage::calcHSV(int s_val, int v_val, int N) {
 
-    uint N_h = 359;
+    int N_h = 359;
     vector<double> h_vec(N);
-    linspace(h_vec, 0, N_h, N);
-
-    double omega = 2*(3.14159) * 10;
-    vector<double> cos_vec(N);
-    for (uint itr = 0; itr < cos_vec.size(); itr++) {
-        cos_vec[itr] = ( cos(omega*itr/N) );
-        h_vec[itr] = h_vec[itr]*cos_vec[itr]*cos_vec[itr];
-    };
-
-
     vector<QColor> hsv_vec(N);
-    for (uint itr = 0; itr < hsv_vec.size(); itr++) {
-        if (itr == 0) {
-            hsv_vec[itr] = QColor::fromHsv(0, 0, 0);
-        } else {
-            hsv_vec[itr] = QColor::fromHsv(h_vec[itr], s_val, v_val);
+
+    if (colrFlag) {
+        linspace(h_vec, 0, N_h, N);
+
+        double omega = 2*(3.14159) * 10;
+        vector<double> cos_vec(N);
+        for (uint itr = 0; itr < cos_vec.size(); itr++) {
+            cos_vec[itr] = ( cos(omega*itr/N) );
+            //h_vec[itr] = h_vec[itr]*cos_vec[itr]*cos_vec[itr];
+            h_vec[itr] = N_h*cos_vec[itr]*cos_vec[itr];
         };
-        hsv_vec[itr] = hsv_vec[itr].toRgb();
-    };
+
+
+
+        for (uint itr = 0; itr < hsv_vec.size(); itr++) {
+            if (itr == 0) {
+                hsv_vec[itr] = QColor::fromHsv(0, 0, 0);
+            } else {
+                hsv_vec[itr] = QColor::fromHsv(h_vec[itr], s_val, v_val);
+            };
+            hsv_vec[itr] = hsv_vec[itr].toRgb();
+        };
+    }
+    else if (!colrFlag) {
+        linspace(h_vec, 0, 255, N);
+        uint val;
+
+        for (uint itr = 0; itr < hsv_vec.size(); itr++) {
+            val = h_vec[itr];
+            hsv_vec[itr] = qRgb(val, val, val);
+        }
+    }
 
     return hsv_vec;
 
 };
+
+
+void SetImage::updatePalette(QString in_text) {
+
+
+    if (in_text == "HSV") {
+        colrFlag = true;
+    }
+    else if (in_text == "Gray") {
+        colrFlag = false;
+    }
+    else {
+        throw runtime_error("Bad colour spec");
+    }
+
+    setCalcFlag(true);
+
+    return;
+}
+
+
+
+
+/// Function for calculating values of set
+vector<double> SetImage::setFunc() {
+    /// \todo TODO: rethink handling in base class (undefined) -- could be more elegant?
+
+    throw runtime_error("Undefined set function");
+
+    vector<double> output(0);
+    return output;
+
+}
+

@@ -20,20 +20,25 @@ QMAKE_CXXFLAGS_RELEASE *= -O3
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+
 SOURCES += \
-    inputpanel.cpp \
-    lcdpanel.cpp \
-    lineeditnumber.cpp \
     main.cpp \
     imageviewer.cpp \
-    setimage.cpp
+    setfam/juliaset.cpp \
+    setfam/mandelbrotset.cpp \
+    setimage.cpp \
+    widgets/inputpanel.cpp \
+    widgets/lcdpanel.cpp \
+    widgets/lineeditnumber.cpp
 
 HEADERS += \
     imageviewer.h \
-    inputpanel.h \
-    lcdpanel.h \
-    lineeditnumber.h \
-    setimage.h
+    setfam/juliaset.h \
+    setfam/mandelbrotset.h \
+    setimage.h \
+    widgets/inputpanel.h \
+    widgets/lcdpanel.h \
+    widgets/lineeditnumber.h
 
 FORMS += \
     imageviewer.ui
@@ -42,3 +47,6 @@ FORMS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+DISTFILES += \
+    widgets/widgets.pri

@@ -1,28 +1,14 @@
 
 ## ToDo:
-- [x] Migrate calc from imageviewer constructor
-- [x] Add parallel pragma
-	- [x] Add compiler flags
-- [x] Time image update
-- [x] Time image render
-- [x] Change to center & span format
-- [x] Update to avoid complex<double> (8x speedup)
-	- [x] Mandelbrot
-		- [x] Loop K then C, pragma simd on C
-	- [x] Julia
 - Display
-	- Fix resizing of number fields
+	- [x] Fix resizing of number fields
 	- [x] Add stats on render time
 	- Add stats on mem usage
 - Controls
-	- Zoom
-		- Button
-		- [x] Scroll
-	- Pan
-	- [x] Recenter
+	- [ ] Game pad
 - Features
-	- Colour select
-	- Function select
+	- [ ] Colour select
+	- [ ] Function select
 		- exp(z^n)
 - Documentation
 - Error handling
@@ -35,6 +21,7 @@
 
 ### Priority:
 
+- [ ] Documentation
 - [ ] Dock images
 - [ ] Colour control
 - [ ] Refactoring
@@ -85,7 +72,10 @@ Subclass SetImage
 - create basic class
 - function
 
-SetImage update:
-	- add linkLCD
-	- add InputPanel
-		- Vector is appropriate (all fields will be checked in sequence)
+
+#### Now
+
+- Test mandelbrot on GPU
+	- Memcopy
+	- Run code once (time)
+	- Run code on same mem (time)

@@ -2,9 +2,11 @@
 #define IMAGEVIEWER_H
 
 #include "setimage.h"
-#include "lcdpanel.h"
-#include "lineeditnumber.h"
-#include "inputpanel.h"
+#include "setfam/mandelbrotset.h"
+#include "setfam/juliaset.h"
+#include "widgets/lcdpanel.h"
+#include "widgets/lineeditnumber.h"
+#include "widgets/inputpanel.h"
 
 #include <QMainWindow>
 #include <QLabel>
@@ -12,13 +14,13 @@
 #include <QLCDNumber>
 
 //#include <QtGamepad>
+#include <QComboBox>
 #include <QCursor>
 #include <QKeyEvent>
 #include <QMouseEvent>
 #include <QWheelEvent>
 
-#include <vector>  	 // Defines vector type
-#include <complex>
+#include <vector>
 using namespace std;
 
 #include <chrono> // Timing library
@@ -39,26 +41,41 @@ public:
     ImageViewer(QWidget *parent = nullptr);
     ~ImageViewer();
 
-    void updateImage(QLabel* imSpace, vector<unsigned int> b_set, int num_R, int num_I);
-    void updateParamDisplay(double bound_RL, double bound_RU, double bound_IL, double bound_IU, int num_R, int num_I, int num_K);
 
+    /*!
+     *  @brief Uses main window mouse tracking to check for click target
+     *  @param[in] targ_test pointer to widget being tested
+     */
     bool checkClickTarget(QWidget* targ_test);
 
+    /*!
+     * @brief testPalette Stand-in for colour palette function
+     */
     void testPalette();
+
+    /*!
+     * @brief Calculates an HSV colour palette
+     * @param[in] s_val saturation [0-255]
+     * @param[in] v_val value [0-255]
+     * @param[in] N number of points in palette [0-359]
+     */
     vector<QColor> calcHSV(int s_val, int v_val, int N);
+
 
 
 private slots:
     void updateSet();
+    void updatePalette();
 
 private:
     Ui::ImageViewer *ui;
-    QLabel *imageLabel;
     QScrollArea *scrollAreaM;
     QScrollArea *scrollAreaP;
-    SetImage mapImage;
-    SetImage pointImage;
+    QComboBox *testBox;
+    MandelbrotSet mapImage;
+    JuliaSet pointImage;
     bool initFlag;
+    bool colrFlag;
 
 protected:
     /*! Handles keyboard input */
@@ -69,5 +86,6 @@ protected:
     void mouseMoveEvent(QMouseEvent *event) override;
     /*! Handles mouse scroll */
     void wheelEvent(QWheelEvent *event) override;
+
 };
 #endif // IMAGEVIEWER_H

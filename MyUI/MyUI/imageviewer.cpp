@@ -1,8 +1,7 @@
 #include "imageviewer.h"
 #include "ui_imageviewer.h"
 #include "setimage.h"
-#include "lcdpanel.h"
-#include "lineeditnumber.h"
+
 
 #include "../../AuxiliaryCode.h"
 
@@ -18,12 +17,11 @@ ImageViewer::ImageViewer(QWidget *parent)
     , scrollAreaM(new QScrollArea)
     , scrollAreaP(new QScrollArea)
 {
-    // TODO: initialize local variables
-    //      - pixel arrays (need to check time vs mem for each approach)
 
     ui->setupUi(this);
     initFlag = 1; // Flag for setting default image
 
+    // UI Widget Settings
     setCentralWidget(ui->centralwidget);
     ui->scrollAreaM->setWidgetResizable(true);
     ui->imageLabelM->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
@@ -32,15 +30,11 @@ ImageViewer::ImageViewer(QWidget *parent)
     ui->imageLabelP->setScaledContents(true);
     ui->centralwidget->layout()->setContentsMargins(0, 0, 0, 0); // Simplifies cursor tracking
 
-    ui->label_colourPalette->setScaledContents(true); // TESTING
-
-    connect(ui->updateButton, &QPushButton::released, this, &ImageViewer::updateSet);
-
     // Add widgets from SetImage
     ui->tab_1->layout()->addWidget(mapImage.lcdPanel);
     ui->tab_3->layout()->addWidget(pointImage.lcdPanel);
 
-
+    /// \todo: TODO: update input panel to be ScrollArea
     ui->tab_1->layout()->addWidget(scrollAreaM);
     scrollAreaM->setWidgetResizable(true);
     scrollAreaM->setWidget(mapImage.inputPanel);
@@ -51,18 +45,19 @@ ImageViewer::ImageViewer(QWidget *parent)
     scrollAreaP->setWidget(pointImage.inputPanel);
     scrollAreaP->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
 
+    // TESTING - colour
+    colrFlag = 0;
+    ui->comboBox->addItem("HSV");
+    ui->comboBox->addItem("Gray");
+    connect(ui->comboBox, SIGNAL(textActivated(QString)), SLOT(updatePalette()));
+    testPalette();
+    // TESTING - end
+
 
     /// Map Set
     // Initialize Display labels
     mapImage.disp_data.label_outputMsg = ui->label_outputM;
     mapImage.disp_data.label_image = ui->imageLabelM;
-
-    // Set default values
-    // TODO: subclass and include in constructor
-    mapImage.initImage('M'); // M for Map
-    mapImage.linkTextInput();
-    mapImage.updateParamDisp();
-
 
 
     /// Point Set
@@ -70,19 +65,9 @@ ImageViewer::ImageViewer(QWidget *parent)
     pointImage.disp_data.label_image = ui->imageLabelP;
     pointImage.disp_data.label_outputMsg = ui->label_outputP;
 
-    // Set default values
-    // TODO: subclass and include in constructor
-    pointImage.initImage('P'); // P for Point
-    pointImage.linkTextInput();
-    pointImage.updateParamDisp();
 
     /// Generate default images
     updateSet();
-
-    // TESTING - start
-    testPalette();
-    // TESTING - end
-
 
 
 }
@@ -90,23 +75,64 @@ ImageViewer::ImageViewer(QWidget *parent)
 ImageViewer::~ImageViewer()
 {
     delete ui;
-    // Assigned to layout -- handled by layout destructor
-    //delete scrollAreaM;
-    //delete scrollAreaP;
+
+    // Assigned to layout -- usually handled by layout destructor
+    /*
+    if (scrollAreaM != nullptr) {
+        try {
+            delete scrollAreaM;
+        }
+        catch (const runtime_error &err) {
+            cout << "Err from scrollM" << err.what() << endl;
+        }
+        scrollAreaM = nullptr;
+    }
+    if (scrollAreaP != nullptr) {
+        //delete scrollAreaP;
+        scrollAreaP = nullptr;
+    }
+    */
+
+
 }
+
+
+
 
 
 // Calculation Button
 void ImageViewer::keyPressEvent(QKeyEvent *event)
 {
-    // TODO: global scale_factor for zooming ? -- add to SetImage
+
+    double scale_pan = 0.05;
+    double scale_zoom = 0.9;
+
+    /// \todo Global scale_factor for zooming ? -- add to SetImage
     if(event->key() == Qt::Key_Return) {
         updateSet();
-    } else if (event->key() == Qt::Key_W) { // Zoom in
-        pointImage.zoomImage(0.9);
+    }
+    else if (event->key() == Qt::Key_W) { // Pan up
+        pointImage.panImage(0, scale_pan);
         updateSet();
-    } else if (event->key() == Qt::Key_S) {
-        pointImage.zoomImage(1/0.9); // Zoom out
+    }
+    else if (event->key() == Qt::Key_S) { // Pan down
+        pointImage.panImage(0, -scale_pan);
+        updateSet();
+    }
+    else if (event->key() == Qt::Key_A) { // Pan left
+        pointImage.panImage(-scale_pan, 0);
+        updateSet();
+    }
+    else if (event->key() == Qt::Key_D) { // Pan right
+        pointImage.panImage(scale_pan, 0);
+        updateSet();
+    }
+    else if (event->key() == Qt::Key_E) { // Zoom in
+        pointImage.zoomImage(scale_zoom);
+        updateSet();
+    }
+    else if (event->key() == Qt::Key_Q) {
+        pointImage.zoomImage(1/scale_zoom); // Zoom out
         updateSet();
     };
 };
@@ -176,7 +202,7 @@ void ImageViewer::wheelEvent(QWheelEvent *event) {
             QPoint numDegrees = event->angleDelta() / 8;
 
             if ( checkClickTarget(ui->imageLabelM) ) {
-                if (numDegrees.y() > 0) { // TODO: convert to function (in ImageViewer)
+                if (numDegrees.y() > 0) { /// todo Convert scrolling to function (in ImageViewer)
                     mapImage.zoomImage(scale_in);
                 } else {
                     mapImage.zoomImage(scale_out);
@@ -195,6 +221,7 @@ void ImageViewer::wheelEvent(QWheelEvent *event) {
     };
 };
 
+
 bool ImageViewer::checkClickTarget(QWidget* target_test) {
     QPoint cur_pos = target_test->mapFromGlobal( target_test->cursor().pos() );
 
@@ -209,8 +236,8 @@ bool ImageViewer::checkClickTarget(QWidget* target_test) {
 
 void ImageViewer::updateSet()
 {
-    // TODO:
-    //      - Update to reuse set memory (z_set, c_set) instead of reallocating each time (compare time/memory usage)
+    /// TODO:
+    /// \todo Update to reuse set memory (z_set, c_set) instead of reallocating each time (compare time/memory usage, check cache size)
 
 
     // Timing Init
@@ -220,7 +247,7 @@ void ImageViewer::updateSet()
 
     auto t00 = high_resolution_clock::now(); // Full execution timer
 
-    // On init: use defaults, otherwise
+    // On init: use defaults, otherwise check for user input
     if (initFlag) {
         initFlag = 0;
     } else {
@@ -229,9 +256,10 @@ void ImageViewer::updateSet()
     };
 
     // Map Set
-    // TODO: convert to method in ImageViewer
-    QPalette palM = QPalette(); // TODO: add colour palette to SetImage
+    /// \todo Convert to method in SetImage (requires adding fields for window colour)
+    QPalette palM = QPalette(); ///< \todo Add colour palette to SetImage (member variable)
     if ( mapImage.getCalcFlag() ) {
+        mapImage.updatePalette(ui->comboBox->currentText());
         t0 = high_resolution_clock::now();
         mapImage.calcSet();
         t1 = high_resolution_clock::now();
@@ -249,9 +277,11 @@ void ImageViewer::updateSet()
 
 
     // Point Set
-    // TODO: convert to method in ImageViewer
+    // TODO: convert to method in ImageViewer or SetImage
     QPalette palP = QPalette(); // TODO: add colour palette to SetImage
     if ( pointImage.getCalcFlag() ) {
+        pointImage.updatePalette(ui->comboBox->currentText());
+
         t0 = high_resolution_clock::now();
         pointImage.calcSet();
         t1 = high_resolution_clock::now();
@@ -269,6 +299,10 @@ void ImageViewer::updateSet()
     auto tFF = high_resolution_clock::now();
     time_map["setUpdate"] = tFF - t00;
 
+    // TESTING - colour
+    testPalette();
+    // TESTING - end
+
     return;
 };
 
@@ -276,8 +310,14 @@ void ImageViewer::updateSet()
 
 
 
+///////////////////////////////////////////////////////
+///
+/// TESTING
+///
+///////////////////////////////////////////////////////
 
-// TESTING
+
+// TESTING - colour
 void ImageViewer::testPalette()
 {
 
@@ -310,28 +350,65 @@ void ImageViewer::testPalette()
 vector<QColor> ImageViewer::calcHSV(int s_val, int v_val, int N) {
 
     int N_h = 359;
-    vector<double> h_vec = linspace(0, N_h, N);
-
-    double omega = 2*(3.14159) * 10;
-    vector<double> cos_vec(N);
-    for (uint itr = 0; itr < cos_vec.size(); itr++) {
-        cos_vec[itr] = ( cos(omega*itr/N) );
-        //h_vec[itr] = h_vec[itr]*cos_vec[itr]*cos_vec[itr];
-        h_vec[itr] = N_h*cos_vec[itr]*cos_vec[itr];
-    };
-
-
+    vector<double> h_vec;
     vector<QColor> hsv_vec(N);
-    for (uint itr = 0; itr < hsv_vec.size(); itr++) {
-        if (itr == 0) {
-            hsv_vec[itr] = QColor::fromHsv(0, 0, 0);
-        } else {
-            hsv_vec[itr] = QColor::fromHsv(h_vec[itr], s_val, v_val);
+
+    if (mapImage.colrFlag) {
+        h_vec = linspace(0, N_h, N);
+
+        double omega = 2*(3.14159) * 10;
+        vector<double> cos_vec(N);
+        for (uint itr = 0; itr < cos_vec.size(); itr++) {
+            cos_vec[itr] = ( cos(omega*itr/N) );
+            //h_vec[itr] = h_vec[itr]*cos_vec[itr]*cos_vec[itr];
+            h_vec[itr] = N_h*cos_vec[itr]*cos_vec[itr];
         };
-        hsv_vec[itr] = hsv_vec[itr].toRgb();
-    };
+
+
+
+        for (uint itr = 0; itr < hsv_vec.size(); itr++) {
+            if (itr == 0) {
+                hsv_vec[itr] = QColor::fromHsv(0, 0, 0);
+            } else {
+                hsv_vec[itr] = QColor::fromHsv(h_vec[itr], s_val, v_val);
+            };
+            hsv_vec[itr] = hsv_vec[itr].toRgb();
+        };
+    }
+    else {
+        h_vec = linspace(0, 255, N);
+        uint val;
+
+        for (uint itr = 0; itr < hsv_vec.size(); itr++) {
+            val = h_vec[itr];
+            hsv_vec[itr] = qRgb(val, val, val);
+        }
+    }
 
     return hsv_vec;
 
 };
 
+
+
+void ImageViewer::updatePalette() { ///< \todo Move combobox to SetImage -- convert to method
+
+    QString this_text = ui->comboBox->currentText();
+    if (this_text == "HSV") {
+        mapImage.colrFlag = true;
+        pointImage.colrFlag = true;
+    }
+    else if (this_text == "Gray") {
+        mapImage.colrFlag = false;
+        pointImage.colrFlag = false;
+    }
+    else {
+        throw runtime_error("Bad colour spec");
+    }
+
+    mapImage.setCalcFlag(true);
+    pointImage.setCalcFlag(true);
+
+}
+
+// TESTING - end
